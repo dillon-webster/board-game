@@ -1,0 +1,16 @@
+import { ArrowUpRight, Trophy } from "lucide-react";
+import { calculateItemValue, money } from "@/lib/valuation";
+import { SLOTS, type GameState } from "@/types/game";
+
+export default function Results({ game, onNewGame }: { game: GameState; onNewGame: () => void }) {
+  const highest = game.scores[0].netWorth;
+  const winners = game.scores.filter(score => score.netWorth === highest).map(score => game.players.find(player => player.id === score.playerId)!.name);
+  return <>
+    <section className="results-hero"><span className="large-icon"><Trophy size={30} /></span><p className="eyebrow">The final hammer has fallen</p><h1>{winners.join(" & ")} {winners.length === 1 ? "wins" : "share the win"}.</h1><p>{money(highest)} in final net worth. Every mystery, finally out in the open.</p><button className="button cream" onClick={onNewGame}>Play another game <ArrowUpRight size={17} /></button></section>
+    <section className="panel results-panel"><div className="panel-heading"><h2>Final accounts</h2><span className="tag">After all fees & forfeitures</span></div><div className="table-scroll"><table><thead><tr><th>Collector</th><th>Cash left</th><th>Item values</th><th>Auction debt</th><th>Net worth</th></tr></thead><tbody>{game.scores.map((score, index) => <tr key={score.playerId}><td><span className="rank">{score.netWorth === highest ? <Trophy size={16} /> : index + 1}</span><strong>{game.players.find(player => player.id === score.playerId)?.name}</strong></td><td>{money(score.cash)}</td><td>{money(score.itemValue)}</td><td>{money(score.auctionDebt)}</td><td><strong>{money(score.netWorth)}</strong></td></tr>)}</tbody></table></div>
+      <div className="settlement-notes">{game.scores.map(score => <p key={score.playerId}><strong>{game.players.find(player => player.id === score.playerId)?.name}:</strong> {money(score.appraisalFees)} in final appraisal fees{score.newDebt > 0 ? `; ${money(score.newDebt)} added debt including the penalty` : ""}. {score.forfeitedItemIds.length ? `${score.forfeitedItemIds.length} collateral item(s) forfeited; the associated leverage debt was cleared.` : "No collateral forfeited."}</p>)}</div>
+    </section>
+    <div className="section-heading row-between"><h2>The full story</h2><span className="muted small">All {game.items.length} lots revealed</span></div>
+    <div className="revealed-grid">{game.items.map(item => <details className="panel revealed-item" key={item.id}><summary><span className="lot-number">{String(item.lot).padStart(2, "0")}</span><span><strong>{item.name}</strong><small>{item.forfeited ? "Forfeited to the auction house" : game.players.find(player => player.id === item.ownerId)?.name ?? "Unowned"}</small></span><strong className="revealed-value">{money(calculateItemValue(item))}</strong></summary><div className="reveal-breakdown"><div className="total-line"><span>Public base value</span><strong>{money(item.baseValue)}</strong></div>{SLOTS.map(slot => <div className="knowledge-slot" key={slot}><div className="row-between"><h4>{slot}</h4><strong>{item.hidden[slot].valueModifier >= 0 ? "+" : ""}{money(item.hidden[slot].valueModifier)}</strong></div><p>{item.hidden[slot].truth}</p></div>)}<div className="total-line"><span>True value (minimum $0)</span><strong>{money(calculateItemValue(item))}</strong></div></div></details>)}</div>
+  </>;
+}
