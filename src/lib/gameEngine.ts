@@ -14,6 +14,7 @@ export type Command =
   | { type: "START_NEGOTIATION" }
   | { type: "START_AUCTION" }
   | { type: "RECORD_AUCTION"; playerId: string; bid: number }
+  | { type: "PASS_AUCTION" }
   | { type: "APPRAISE"; playerId: string; itemId: string; scope: Slot | "full" }
   | { type: "PASS_APPRAISAL"; playerId: string }
   | { type: "REPAY"; playerId: string; amount: number; loanId?: string }
@@ -96,7 +97,7 @@ export function activeLoan(game: GameState, itemId: string) {
   return game.loans.find(loan => loan.itemId === itemId && loan.status === "active");
 }
 
-export function generateGame(names: string[], config: GameConfig = GAME_CONFIG, random: Random = Math.random): GameState {
+export function generateGame(names: string[], config: GameConfig = GAME_CONFIG, random: Random = Math.random, mode: GameState["mode"] = "shared"): GameState {
   requireRule(names.length === 4, "Enter exactly four player names.");
   const cleanNames = names.map(name => name.trim());
   requireRule(cleanNames.every(name => name.length > 0 && name.length <= 32), "Player names must be 1–32 characters.");
@@ -116,9 +117,9 @@ export function generateGame(names: string[], config: GameConfig = GAME_CONFIG, 
     }
   }
   const game: GameState = {
-    version: 1, id: crypto.randomUUID(), config: rules, round: 1, phase: "actions",
+    version: 1, mode, id: crypto.randomUUID(), config: rules, round: 1, phase: "actions",
     players: cleanNames.map((name, index) => ({ id: `player-${index + 1}`, name, cash: rules.startingCash, auctionDebt: 0, knowledge: {} })),
-    items, actions: {}, appraisalDone: [], loans: [], consignment: null, log: [], scores: [],
+    items, actions: {}, appraisalDone: [], loans: [], consignment: null, bidding: null, log: [], scores: [],
   };
   note(game, `The auction house is open. Four collectors, ${rules.rounds} mysteries.`);
   return game;
@@ -144,6 +145,7 @@ function recordAuctionResult(game: GameState, playerId: string, bid: number) {
   const debt = chargeWithDebt(game, player, bid);
   transferItem(item, player, bid);
   game.phase = "appraisal";
+  game.bidding = null;
   game.appraisalDone = game.players.filter(player => !ownedItems(game, player.id).length).map(player => player.id);
   note(game, `${player.name} won lot ${item.lot} for ${money(bid)}.${debt ? ` New auction debt: ${money(debt)}.` : ""}`);
 }
@@ -286,6 +288,7 @@ export function executeCommand(state: GameState, command: Command, random: Rando
         note(game, `Lot ${itemIn(game, listing.itemId).lot} did not sell. Its owner keeps the item.`);
       }
       game.consignment = null;
+      game.bidding = null;
       break;
     }
     case "LEVERAGE": leverageItem(game, command.playerId, command.itemId, command.amount); break;
@@ -302,6 +305,14 @@ export function executeCommand(state: GameState, command: Command, random: Rando
       note(game, `Bidding is open for lot ${currentItem(game).lot}.`);
       break;
     case "RECORD_AUCTION": recordAuctionResult(game, command.playerId, command.bid); break;
+    case "PASS_AUCTION":
+      requirePhase(game, "auction");
+      requireRule(game.mode === "solo", "Only a solo auction can close without a bid.");
+      game.phase = "appraisal";
+      game.bidding = null;
+      game.appraisalDone = game.players.filter(player => !ownedItems(game, player.id).length).map(player => player.id);
+      note(game, `No bids for lot ${currentItem(game).lot}. The lot remains unsold.`);
+      break;
     case "APPRAISE": appraise(game, command.playerId, command.itemId, command.scope); break;
     case "PASS_APPRAISAL": {
       requirePhase(game, "appraisal");

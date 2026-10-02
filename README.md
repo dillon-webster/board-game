@@ -1,6 +1,6 @@
 # Mystery Auction
 
-A playable Next.js prototype for testing the board game on one computer. You can control all four seats yourself or take turns with friends. Physical cards are not needed. Bidding and bluffing happen aloud; the host enters the auction result.
+A playable Next.js prototype for testing the board game on one computer. Play against three local bots, control all four seats yourself, or take turns with friends. Physical cards are not needed. Shared-computer bidding and bluffing happen aloud; solo auctions take turns around the table with you and the bots.
 
 ## Run locally
 
@@ -17,7 +17,23 @@ The game automatically saves in this browser on this address. Refreshing resumes
 
 ## Play a test game
 
-1. Enter four names, or keep the defaults to control all four seats.
+### Play against bots
+
+1. On the setup screen, choose **Play against bots**, enter your name, and open the auction house. If a saved game is open, use **New game** first (this replaces that save).
+2. You control the first seat. Clara (cautious), Jules (balanced), and Remy (bold) automatically take their investigation and appraisal turns. Their public actions appear in the auction ledger.
+3. Buy a clue, consign an item, borrow against an item, or hold. Use your private notebook and Manage funds as usual. Continue through negotiation when ready; bots do not chat, bluff, or negotiate table deals.
+4. At auction, enter **Your bid** or choose **Pass this auction**. You go first, then Clara, Jules, and Remy respond one at a time. Bidding starts at $1,000, and raises must be at least $1,000. Turns circle back when you’re outbid. Passing withdraws that player for the lot; the leader sits out until outbid. When everyone else passes, the leader pays their actual bid. If everyone passes without bidding, the lot remains unsold.
+5. Buy or pass your appraisal, then continue to the next round. After ten rounds, review final settlement and reveal the results.
+
+Bots run in your browser with no API keys or services. They estimate values from the result catalog, their own clues, and purchased appraisals; they cannot inspect unseen item truths, future lots, or your notebook. They reserve cash for research and appraisals and never borrow. You can still use leverage and auction debt. Your own cash and net worth stay visible; opponent cash balances remain private until final results. **Manage funds** shows a breakdown of cash + collection value − auction debt − leverage debt. Unrevealed items use public base value plus appraised modifiers, so the total is labeled an estimate until you know all your item values. This current total does not deduct future settlement fees or assume collateral forfeitures.
+
+Consigning your item starts a resale auction with the bots bidding in seat order. You watch as the seller, and the winner pays their final bid in cash. The engine checks your private reserve after bidding; if the price misses the reserve, you keep the item and the action is spent. Bot limits do not depend on the reserve. Bots do not initiate consignments or direct deals.
+
+Solo games save and resume automatically, including the current bid, bidder, and passes in an unfinished auction. Earlier solo saves pick up with turn-by-turn bidding; no new game is needed. Existing shared-computer saves remain in that mode.
+
+### Shared computer
+
+1. Choose **Shared computer**. Enter four names, or keep the defaults to control all four seats.
 2. Each round, each player buys a clue, consigns an item, takes a leverage loan, or holds.
 3. Use the private notebook to reveal clues and appraisal results. Other players should look away; this is a shared-computer prototype, not secure multiplayer.
 4. Continue to negotiation. Optional table deals record item sales or cash payments for agreements made by the players.
@@ -26,6 +42,14 @@ The game automatically saves in this browser on this address. Refreshing resumes
 7. Advance through ten rounds. Before final settlement, review fees and collateral and repay any loans you want to keep. Finish to reveal every item and calculate the winner.
 
 The in-app **How to play** dialog explains costs and debt restrictions.
+
+## Save a playtest report
+
+On the results screen, choose **Download playtest report** to save an AI-ready `.json` file. Attach it to an AI conversation to review game balance and possible improvements. It includes a summary of final accounts and revealed lot values, suggested review topics, data limitations, and the complete saved game: player notes, hidden item results, leverage loans, rules, final scores, and every recorded ledger entry in play order.
+
+This works with completed games already saved in your browser. Refresh the results page if the button has not appeared. Downloading leaves your saved game unchanged; starting a new game replaces that browser save, so download first to keep the history. The JSON contains a `game` field preserving the full original state; it is an export, not an in-app import feature.
+
+The export date is when you download the file. Event timestamps, per-turn balance snapshots, and bot reasoning were not recorded and are not reconstructed. Private notes in the report reflect settlement, including mandatory final appraisals.
 
 ## Rules implemented
 
@@ -48,7 +72,7 @@ The in-app **How to play** dialog explains costs and debt restrictions.
 - Consignment uses the seller’s Phase 1 action and resolves immediately before other Phase 1 actions continue. An unmet reserve or no buyer means no sale, and the action is still used.
 - Direct sales and information payments are recorded during negotiation. Information itself is shared verbally and is not copied into another notebook.
 - Enter whole-dollar amounts. Auction bids must be positive; reserves and direct sale prices may be zero. Fractional-dollar penalties round up to a dollar.
-- No live bidding engine, bots, multiplayer, authentication, database, or QR codes in this version.
+- Solo mode adds turn-by-turn auctions and local rule-based bots. There is no live multiplayer, AI conversation, authentication, database, or QR codes.
 
 ## Adjust the prototype
 
@@ -56,6 +80,8 @@ The in-app **How to play** dialog explains costs and debt restrictions.
 | --- | --- |
 | `src/lib/config.ts` | Starting cash, rounds, costs, penalties, and loan limits |
 | `src/lib/gameEngine.ts` | Validated game commands and round progression |
+| `src/lib/bots.ts` | Bot observations, value estimates, bidding styles, and auction pricing |
+| `src/lib/botGame.ts` | Automatic bot turns and solo command validation |
 | `src/lib/valuation.ts` | Item valuation, fees, penalties, and scoring |
 | `src/data/items.ts` | Public item templates |
 | `src/data/slotResults.ts` | Hidden results, clue variants, modifiers, compatibility |
@@ -74,6 +100,6 @@ npm run build
 npm run test:e2e
 ```
 
-Engine tests cover phase gates, debt, private knowledge, ownership transfer, loan defaults, mandatory fees, and a complete game. Browser tests use the installed `/usr/bin/chromium` to exercise the ten-round flow, private reveals, persistence, resale, repayments, and a narrow viewport. Override `CHROMIUM_PATH` if Chromium is elsewhere. Playwright starts the local server if it is not already running.
+Engine tests cover phase gates, debt, private knowledge, ownership transfer, loan defaults, mandatory fees, and complete games. Bot tests cover information boundaries, bid order, passes, actual winning prices, and auction resumption, private reserves, cash limits, all-pass auctions, old saves, and sixteen complete solo games. Browser tests use the installed `/usr/bin/chromium` to exercise ten-round shared and solo flows, private reveals, persistence, resale, repayments, and a narrow viewport. Override `CHROMIUM_PATH` if Chromium is elsewhere. Playwright starts the local server if it is not already running.
 
 For a production-mode local server, run `npm run build` followed by `npm start`.

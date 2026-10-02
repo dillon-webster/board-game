@@ -89,6 +89,25 @@ input::placeholder { color: #9aa38f; }
 .seat-2 { color: #597782; background: #e0eaf0; }
 .seat-3 { color: #866784; background: #ece2ed; }
 .save-note { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 10px; color: var(--muted); margin-top: 15px; }
+.mode-picker button { min-height: 43px; }
+.bot-lineup { display: flex; flex-wrap: wrap; gap: 16px; margin: 0 0 25px; }
+.bot-lineup > div { display: flex; align-items: center; gap: 8px; flex: 1; }
+.bot-lineup strong { display: block; font-size: 12px; }
+.bot-lineup span:not(.avatar) { display: block; color: var(--muted); font-size: 10px; white-space: nowrap; }
+.bot-status { width: 100%; margin: 0; padding: 14px 6px; text-align: center; color: var(--muted); font-size: 10px; }
+.live-bid { padding: 12px 0 18px; }
+.live-bid > span, .live-bid small { display: block; color: var(--muted); font-size: 12px; }
+.live-bid > strong { display: block; font: 32px var(--serif); margin: 5px 0; }
+.bid-seats { display: flex; gap: 6px; list-style: none; margin: 0 0 18px; padding: 0; }
+.bid-seats li { flex: 1; min-width: 0; background: #f1f3e9; border: 1px solid var(--line); border-radius: 4px; padding: 9px 5px; text-align: center; font-size: 10px; }
+.bid-seats li[aria-current] { background: #e5eddd; border-color: #8d9e79; }
+.bid-seats strong, .bid-seats span { display: block; overflow-wrap: anywhere; }
+.bid-seats span { color: var(--muted); margin-top: 3px; }
+.bid-turn { font-weight: 600; }
+.bid-history { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.bid-history ol { list-style: none; margin: 8px 0 0; padding: 0; }
+.bid-history li { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 12px; color: var(--muted); }
+.cash-balance .private-cash { display: inline-flex; align-items: center; gap: 7px; font: 22px var(--serif); }
 .game-title { margin-bottom: 29px; }
 .game-title .eyebrow { color: var(--muted); margin-bottom: 8px; }
 .round-marker { padding-left: 25px; border-left: 1px solid #cdd4c4; text-align: right; }
@@ -209,7 +228,11 @@ input::placeholder { color: #9aa38f; }
 .truth strong { font-size: 13px; white-space: nowrap; }
 .total-line { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); padding: 14px 0 0; font-size: 13px; }
 .total-line strong { font-size: 17px; }
-.account-totals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.net-worth-summary { background: var(--forest); color: #faf8ee; padding: 20px; border-radius: 6px; margin-bottom: 22px; }
+.net-worth-summary > span { display: block; font-size: 12px; }
+.net-worth-summary > strong { display: block; font: 36px var(--serif); margin: 7px 0 12px; overflow-wrap: anywhere; }
+.net-worth-summary > p { font-size: 11px; color: #c0cdb4; }
+.account-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
 .account-totals span { display: block; font-size: 10px; color: var(--muted); }
 .account-totals strong { display: block; font: 23px var(--serif); margin-top: 7px; }
 .repayment-box { background: #f1f3e8; padding: 19px; border-radius: 5px; }
@@ -230,6 +253,8 @@ input::placeholder { color: #9aa38f; }
 .results-hero h1 { margin: 14px 0; overflow-wrap: anywhere; }
 .results-hero p:not(.eyebrow) { color: #c0cdb4; font-size: 13px; }
 .results-hero .button { margin-top: 13px; }
+.results-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.results-hero .report-note { margin: 16px auto 0; max-width: 480px; font-size: 11px; }
 .results-panel { margin-top: 25px; }
 .table-scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }

@@ -22,10 +22,10 @@ export default function PrivateNotebook({ game, playerId, itemId, onClose }: { g
       <span className="large-icon"><LockKeyhole size={30} /></span>
       <p className="eyebrow">For {player.name} only</p>
       <h3>A little inside information.</h3>
-      <p>Pass the computer to {player.name}. Make sure the other players look away before revealing your notes.</p>
+      <p>{game.mode === "solo" ? "Your clues and appraisal results are yours alone. Computer opponents only use their own notes." : <>Pass the computer to {player.name}. Make sure the other players look away before revealing your notes.</>}</p>
       <button className="button primary" onClick={() => setRevealed(true)}><Eye size={17} /> Reveal my private notes</button>
     </div> : <>
-      <div className="notice"><EyeOff size={18} /><span>Private information · close this notebook before passing the computer.</span></div>
+      <div className="notice"><EyeOff size={18} /><span>{game.mode === "solo" ? "Your private information · hidden from the bots." : "Private information · close this notebook before passing the computer."}</span></div>
       {knownItems.length === 0 && <div className="empty-state"><NotebookPen size={28} /><p>No clues or appraisals yet.</p></div>}
       <div className="notebook-content">
         {knownItems.map(item => {

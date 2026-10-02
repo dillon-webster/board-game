@@ -71,6 +71,8 @@ const scoreSchema = z.object({
 
 export const gameSchema = z.object({
   version: z.literal(1),
+  // Saves made before solo mode existed remain shared-computer games.
+  mode: z.enum(["shared", "solo"]).default("shared"),
   id: z.string(),
   config: configSchema,
   round: z.number().int().positive(),
@@ -84,6 +86,15 @@ export const gameSchema = z.object({
     remaining: money, status: z.enum(["active", "repaid", "forfeited"]),
   })),
   consignment: z.object({ sellerId: z.string(), itemId: z.string(), reserve: money }).nullable(),
+  bidding: z.object({
+    itemId: z.string(),
+    currentBid: money.max(1_000_000_000),
+    highBidderId: z.string().nullable(),
+    turnPlayerId: z.string(),
+    cycle: z.number().int().positive(),
+    passedPlayerIds: z.array(z.string()),
+    history: z.array(z.object({ playerId: z.string(), bid: money.max(1_000_000_000).nullable() })),
+  }).nullable().default(null),
   log: z.array(z.object({ id: z.string(), round: z.number().int(), text: z.string() })),
   scores: z.array(scoreSchema),
 });

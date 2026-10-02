@@ -3,11 +3,13 @@
 import { useState, type FormEvent } from "react";
 import { ArrowRight, Check, Gavel, HandCoins, LockKeyhole, Search, SkipForward } from "lucide-react";
 import { activeLoan, currentItem, ownedItems, type Command } from "@/lib/gameEngine";
+import { BID_INCREMENT, isBot } from "@/lib/bots";
+import type { PlayCommand } from "@/lib/botGame";
 import { money, withPenalty } from "@/lib/valuation";
 import { SLOTS, type GameState, type Player } from "@/types/game";
 import Modal from "./Modal";
 
-export type Dispatch = (command: Command) => boolean;
+export type Dispatch = (command: PlayCommand) => boolean;
 type ControlsProps = { game: GameState; player: Player; dispatch: Dispatch };
 
 export function MoneyInput({ label, value, onChange, min = 1, max = 1_000_000_000 }: { label: string; value: string; onChange: (value: string) => void; min?: number; max?: number }) {
@@ -41,7 +43,7 @@ function ActionControls({ game, player, dispatch }: ControlsProps) {
   const [reserveOpen, setReserveOpen] = useState(false);
   const selectedItem = availableItems.find(item => item.id === itemId);
   const taken = game.actions[player.id];
-  if (taken) return <div className="empty-state"><span className="large-icon"><Check /></span><h3>Action recorded</h3><p>{player.name} chose {taken === "clue" ? "Buy a Clue" : taken}. Select another player to continue.</p></div>;
+  if (taken) return <div className="empty-state"><span className="large-icon"><Check /></span><h3>Action recorded</h3><p>{player.name} chose {taken === "clue" ? "Buy a Clue" : taken}. {game.mode === "solo" ? "The bots have taken their turns. Continue when you’re ready." : "Select another player to continue."}</p></div>;
   return <div className="control-content">
     <p className="muted">One action for {player.name}. What’s your next move?</p>
     <div className="segmented" aria-label="Phase 1 action">
@@ -90,13 +92,44 @@ function AuctionControls({ game, dispatch }: { game: GameState; dispatch: Dispat
   </div>;
 }
 
+function BotAuctionControls({ game, dispatch }: { game: GameState; dispatch: Dispatch }) {
+  const bidding = game.bidding;
+  const minimum = (bidding?.currentBid ?? 0) + BID_INCREMENT;
+  const [bid, setBid] = useState(String(minimum));
+  const player = game.players[0];
+  const shortfall = Math.max(0, Number(bid) - player.cash);
+  if (!bidding) return <div className="control-content">Opening bidding…</div>;
+  const humanTurn = !isBot(game, bidding.turnPlayerId);
+  const leader = game.players.find(person => person.id === bidding.highBidderId);
+  const next = game.players.find(person => person.id === bidding.turnPlayerId)!;
+  const item = game.items.find(item => item.id === bidding.itemId)!;
+  return <div className="control-content">
+    <span className="tag">Bidding round {bidding.cycle}</span>
+    {game.consignment && <h3>Resale · {item.name}</h3>}
+    <div className="live-bid"><span>Current bid</span><strong>{bidding.currentBid ? money(bidding.currentBid) : "No bids yet"}</strong><small>{leader ? `${leader.name} is leading` : `Opening bid: ${money(BID_INCREMENT)}`}</small></div>
+    <ol className="bid-seats" aria-label="Bidding order">{game.players.filter(person => person.id !== game.consignment?.sellerId).map(person => <li key={person.id} aria-current={person.id === next.id ? "step" : undefined}><strong>{person.id === player.id ? "You" : person.name}</strong><span>{bidding.passedPlayerIds.includes(person.id) ? "Passed" : person.id === next.id ? "Up next" : person.id === leader?.id ? "Leading" : "In"}</span></li>)}</ol>
+    <p className="bid-turn" role="status">{humanTurn ? "Your turn to bid or pass." : `${next.name} is deciding…`}</p>
+    {humanTurn ? <>
+      <p className="muted small">Raise by at least {money(BID_INCREMENT)}. Your bid is the price you’ll pay if everyone else passes.</p>
+      <form onSubmit={event => { event.preventDefault(); dispatch({ type: "PLACE_BID", amount: bid.trim() ? Number(bid) : NaN }); }}>
+        <MoneyInput label="Your bid" value={bid} onChange={setBid} min={minimum} />
+        {shortfall > 0 && Number.isFinite(shortfall) && <p className="inline-warning">Winning at this price creates {money(withPenalty(shortfall, game.config.auctionDebtPenalty))} in auction debt, including the penalty.</p>}
+        <button type="submit" className="button primary full-width" disabled={minimum > 1_000_000_000}><Gavel size={17} /> Place bid</button>
+      </form>
+      <button className="button quiet full-width" onClick={() => dispatch({ type: "PASS_BID" })}><SkipForward size={16} /> Pass this auction</button>
+      <p className="muted small">Passing withdraws you from this lot.</p>
+    </> : <p className="muted small">{game.consignment ? "The bots bid in seat order. Your private reserve is checked when bidding closes." : bidding.passedPlayerIds.includes(player.id) ? "You’ve passed. The remaining bidders will finish this auction." : "The bots respond in seat order, then bidding comes back to you if you’re outbid."}</p>}
+    {bidding.history.length > 0 && <div className="bid-history"><h4>Latest bids</h4><ol>{bidding.history.slice(-8).map((entry, index) => <li key={index}><span>{game.players.find(person => person.id === entry.playerId)?.name}</span><strong>{entry.bid === null ? "Passed" : money(entry.bid)}</strong></li>)}</ol></div>}
+  </div>;
+}
+
 function AppraisalControls({ game, player, dispatch }: ControlsProps) {
   const available = ownedItems(game, player.id).filter(item => item.ownerAppraisedSlots.length < SLOTS.length);
   const [itemId, setItemId] = useState(available[0]?.id ?? "");
   const [scope, setScope] = useState<(typeof SLOTS)[number] | "full">("full");
   const item = available.find(item => item.id === itemId);
   const cost = scope === "full" ? game.config.fullAppraisalCost : game.config.partialAppraisalCost;
-  if (game.appraisalDone.includes(player.id)) return <div className="empty-state"><span className="large-icon"><Check /></span><h3>Window complete</h3><p>{player.name} has finished or has no items to appraise. Select another player to continue.</p></div>;
+  if (game.appraisalDone.includes(player.id)) return <div className="empty-state"><span className="large-icon"><Check /></span><h3>Window complete</h3><p>{player.name} has finished or has no items to appraise. {game.mode === "solo" ? "The bots have finished their appraisals too." : "Select another player to continue."}</p></div>;
   return <div className="control-content">
     <p className="muted">{player.name} may purchase one appraisal on one owned item this round.</p>
     {available.length ? <>
@@ -111,14 +144,14 @@ function AppraisalControls({ game, player, dispatch }: ControlsProps) {
 }
 
 export default function GameControls({ game, player, dispatch, onDeals }: ControlsProps & { onDeals: () => void }) {
-  if (game.consignment) return <ConsignmentResult game={game} dispatch={dispatch} />;
+  if (game.consignment) return game.mode === "solo" ? <BotAuctionControls key={game.bidding?.history.length} game={game} dispatch={dispatch} /> : <ConsignmentResult game={game} dispatch={dispatch} />;
   if (game.phase === "actions") return <ActionControls game={game} player={player} dispatch={dispatch} />;
-  if (game.phase === "auction") return <AuctionControls game={game} dispatch={dispatch} />;
+  if (game.phase === "auction") return game.mode === "solo" ? <BotAuctionControls key={game.bidding?.history.length} game={game} dispatch={dispatch} /> : <AuctionControls game={game} dispatch={dispatch} />;
   if (game.phase === "appraisal") return <AppraisalControls game={game} player={player} dispatch={dispatch} />;
   return <div className="control-content negotiation-copy">
-    <span className="large-icon"><HandCoins size={28} /></span><h3>Make your case.<br />Or make a deal.</h3>
-    <p>Compare notes, bluff about what you know, and agree on any offers. You can record item sales and payments here.</p>
-    <button className="button secondary full-width" onClick={onDeals}>Record a table deal</button>
+    <span className="large-icon"><HandCoins size={28} /></span><h3>{game.mode === "solo" ? "Consider your next bid." : <>Make your case.<br />Or make a deal.</>}</h3>
+    <p>{game.mode === "solo" ? "Review your notebook and manage your funds before bidding. Bots don’t negotiate table deals; you can offer an owned item to them with Consign during Investigate." : "Compare notes, bluff about what you know, and agree on any offers. You can record item sales and payments here."}</p>
+    {game.mode !== "solo" && <button className="button secondary full-width" onClick={onDeals}>Record a table deal</button>}
     <button className="button primary full-width" onClick={() => dispatch({ type: "START_AUCTION" })}>Continue to Auction <ArrowRight size={17} /></button>
   </div>;
 }

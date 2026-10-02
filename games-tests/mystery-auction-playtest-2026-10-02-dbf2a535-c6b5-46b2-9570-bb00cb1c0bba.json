@@ -1,0 +1,3997 @@
+{
+  "format": "mystery-auction-playtest",
+  "reportVersion": 1,
+  "exportedAt": "2026-10-02T13:53:57.090Z",
+  "summary": {
+    "mode": "solo",
+    "roundsCompleted": 10,
+    "eventCount": 442,
+    "winners": [
+      {
+        "playerId": "player-3",
+        "name": "Jules"
+      }
+    ],
+    "finalAccounts": [
+      {
+        "playerId": "player-3",
+        "cash": 35000,
+        "itemValue": 560000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 595000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": [],
+        "name": "Jules",
+        "rank": 1,
+        "controller": "computer"
+      },
+      {
+        "playerId": "player-2",
+        "cash": 43000,
+        "itemValue": 540000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 583000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": [],
+        "name": "Clara",
+        "rank": 2,
+        "controller": "computer"
+      },
+      {
+        "playerId": "player-1",
+        "cash": 30000,
+        "itemValue": 505000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 535000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": [],
+        "name": "Player 1",
+        "rank": 3,
+        "controller": "human"
+      },
+      {
+        "playerId": "player-4",
+        "cash": 65000,
+        "itemValue": 380000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 445000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": [],
+        "name": "Remy",
+        "rank": 4,
+        "controller": "computer"
+      }
+    ],
+    "lots": [
+      {
+        "itemId": "lot-1",
+        "lot": 1,
+        "name": "Astronomer’s Cabinet",
+        "baseValue": 140000,
+        "trueValue": 370000,
+        "finalOwnerId": "player-1",
+        "finalOwnerName": "Player 1",
+        "forfeited": false,
+        "lastPurchasePrice": 196000
+      },
+      {
+        "itemId": "lot-2",
+        "lot": 2,
+        "name": "Military Footlocker",
+        "baseValue": 90000,
+        "trueValue": 120000,
+        "finalOwnerId": "player-4",
+        "finalOwnerName": "Remy",
+        "forfeited": false,
+        "lastPurchasePrice": 159000
+      },
+      {
+        "itemId": "lot-3",
+        "lot": 3,
+        "name": "Antique Telescope",
+        "baseValue": 180000,
+        "trueValue": 305000,
+        "finalOwnerId": "player-3",
+        "finalOwnerName": "Jules",
+        "forfeited": false,
+        "lastPurchasePrice": 191000
+      },
+      {
+        "itemId": "lot-4",
+        "lot": 4,
+        "name": "Dusty Oil Painting",
+        "baseValue": 150000,
+        "trueValue": 140000,
+        "finalOwnerId": "player-2",
+        "finalOwnerName": "Clara",
+        "forfeited": false,
+        "lastPurchasePrice": 160000
+      },
+      {
+        "itemId": "lot-5",
+        "lot": 5,
+        "name": "Locked Sea Chest",
+        "baseValue": 120000,
+        "trueValue": 135000,
+        "finalOwnerId": "player-1",
+        "finalOwnerName": "Player 1",
+        "forfeited": false,
+        "lastPurchasePrice": 184000
+      },
+      {
+        "itemId": "lot-6",
+        "lot": 6,
+        "name": "Military Footlocker",
+        "baseValue": 90000,
+        "trueValue": 0,
+        "finalOwnerId": "player-4",
+        "finalOwnerName": "Remy",
+        "forfeited": false,
+        "lastPurchasePrice": 131000
+      },
+      {
+        "itemId": "lot-7",
+        "lot": 7,
+        "name": "Antique Telescope",
+        "baseValue": 180000,
+        "trueValue": 255000,
+        "finalOwnerId": "player-3",
+        "finalOwnerName": "Jules",
+        "forfeited": false,
+        "lastPurchasePrice": 174000
+      },
+      {
+        "itemId": "lot-8",
+        "lot": 8,
+        "name": "Locked Sea Chest",
+        "baseValue": 120000,
+        "trueValue": 135000,
+        "finalOwnerId": "player-2",
+        "finalOwnerName": "Clara",
+        "forfeited": false,
+        "lastPurchasePrice": 86000
+      },
+      {
+        "itemId": "lot-9",
+        "lot": 9,
+        "name": "Astronomer’s Cabinet",
+        "baseValue": 140000,
+        "trueValue": 265000,
+        "finalOwnerId": "player-2",
+        "finalOwnerName": "Clara",
+        "forfeited": false,
+        "lastPurchasePrice": 86000
+      },
+      {
+        "itemId": "lot-10",
+        "lot": 10,
+        "name": "Dusty Oil Painting",
+        "baseValue": 150000,
+        "trueValue": 260000,
+        "finalOwnerId": "player-4",
+        "finalOwnerName": "Remy",
+        "forfeited": false,
+        "lastPurchasePrice": 20000
+      }
+    ]
+  },
+  "analysisContext": {
+    "currency": "USD; monetary values are whole dollars",
+    "netWorthFormula": "cash + retained item true values - auction debt - leverage debt, after settlement",
+    "reviewTopics": [
+      "Compare winning bids and resale prices with true item values, accounting for research costs and final fees.",
+      "Review bidding competition, passes, turn order, and potential bot strategy weaknesses.",
+      "Evaluate clue and appraisal costs, debt penalties, leverage, and collateral forfeitures.",
+      "Look for runaway leads, opportunities with little competition, and confusing or repetitive play patterns.",
+      "Suggest specific rule or bot changes to test, and identify additional data needed to evaluate them."
+    ],
+    "limitations": [
+      "This file contains one completed playtest. Proposed balance changes should be tested across more games.",
+      "exportedAt is the download time. Game start time, event timestamps, and duration were not recorded.",
+      "game.log is the complete recorded ledger in play order. Events have round numbers and public descriptions, not structured commands or per-turn balance snapshots.",
+      "Bot bid limits, decision reasons, and the code version running at each turn were not recorded.",
+      "Player knowledge and appraisal status reflect final settlement, including mandatory final appraisals. Do not assume players knew these truths earlier; consult the ledger for purchases and treat missing timing details as unknown.",
+      "lastPurchasePrice is the most recent sale, which may be a resale. Original auction prices and earlier transfers are in the ledger.",
+      "Earlier game versions may record only auction outcomes. Missing individual bids or passes cannot be reconstructed reliably."
+    ]
+  },
+  "game": {
+    "version": 1,
+    "mode": "solo",
+    "id": "dbf2a535-c6b5-46b2-9570-bb00cb1c0bba",
+    "config": {
+      "startingCash": 500000,
+      "rounds": 10,
+      "clueCost": 5000,
+      "partialAppraisalCost": 10000,
+      "fullAppraisalCost": 25000,
+      "endgameFullAppraisalCost": 50000,
+      "endgameCompletionCost": 30000,
+      "auctionDebtPenalty": 0.2,
+      "leverageLoanPercent": 0.5,
+      "leveragePenalty": 0.1
+    },
+    "round": 10,
+    "phase": "finished",
+    "players": [
+      {
+        "id": "player-1",
+        "name": "Player 1",
+        "cash": 30000,
+        "auctionDebt": 0,
+        "knowledge": {
+          "lot-1": {
+            "clues": {
+              "Authenticity": [
+                "Wear appears continuous across both exposed and protected surfaces."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-2": {
+            "clues": {
+              "Authenticity": [
+                "The maker’s lettering differs slightly from archived examples."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-3": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "Even the most fragile details appear undisturbed."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-4": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "One paper label appears to have another layer beneath it."
+              ]
+            },
+            "appraisedSlots": []
+          },
+          "lot-5": {
+            "clues": {
+              "Authenticity": [
+                "The maker’s lettering differs slightly from archived examples."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-8": {
+            "clues": {
+              "Authenticity": [
+                "The maker’s lettering differs slightly from archived examples."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-9": {
+            "clues": {
+              "Authenticity": [
+                "Two sections show noticeably different patterns of wear."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-10": {
+            "clues": {
+              "Authenticity": [
+                "Its regional styling conflicts with the auction catalog attribution."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          }
+        }
+      },
+      {
+        "id": "player-2",
+        "name": "Clara",
+        "cash": 43000,
+        "auctionDebt": 0,
+        "knowledge": {
+          "lot-1": {
+            "clues": {
+              "Authenticity": [
+                "Tool marks are consistent with period manufacturing methods."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-2": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "Delicate edges remain surprisingly sharp."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-3": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "A receipt mentions a buyer whose surname appears in collecting journals."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-4": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "One paper label appears to have another layer beneath it."
+              ]
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-5": {
+            "clues": {
+              "Authenticity": [
+                "A patch of surface aging looks unusually regular."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-6": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "A concealed surface shows signs of prolonged moisture exposure."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-7": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "Previous inventory records list only a generic description."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-8": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "The bottom sounds slightly hollow when tapped."
+              ]
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-9": {
+            "clues": {
+              "Authenticity": [
+                "Two sections show noticeably different patterns of wear."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-10": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "Even the most fragile details appear undisturbed."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          }
+        }
+      },
+      {
+        "id": "player-3",
+        "name": "Jules",
+        "cash": 35000,
+        "auctionDebt": 0,
+        "knowledge": {
+          "lot-1": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "Even the most fragile details appear undisturbed."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-2": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "An old label shares a distinctive typeface with a known collection."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-3": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "A faint inscription appears only in raking light."
+              ]
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-4": {
+            "clues": {
+              "Authenticity": [
+                "The finish changes subtly around several joins."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-5": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "Routine maintenance appears to have kept deterioration in check."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-6": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "Previous inventory records list only a generic description."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-7": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "A paper edge is thicker than expected."
+              ]
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-8": {
+            "clues": {
+              "Authenticity": [
+                "An identifying mark sits over a scratch rather than beneath it."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-9": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "A conservator’s old storage note recommends minimal intervention."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-10": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "A collection number matches the format used by a prominent estate."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          }
+        }
+      },
+      {
+        "id": "player-4",
+        "name": "Remy",
+        "cash": 65000,
+        "auctionDebt": 0,
+        "knowledge": {
+          "lot-1": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "An old label shares a distinctive typeface with a known collection."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-2": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "A small accent has tarnished differently from neighboring materials."
+              ]
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-3": {
+            "clues": {
+              "Authenticity": [
+                "Two sections show noticeably different patterns of wear."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-4": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "There is movement at a joint that should be rigid."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-5": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "A port stamp is dated just before a well-known departure."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-6": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "The visible construction accounts for nearly all of its weight."
+              ]
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          },
+          "lot-7": {
+            "clues": {
+              "Authenticity": [
+                "An obscure design detail appears in an early workshop drawing."
+              ],
+              "Condition": [],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-8": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [
+                "Routine maintenance appears to have kept deterioration in check."
+              ],
+              "History": [],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-9": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [
+                "An old label shares a distinctive typeface with a known collection."
+              ],
+              "Discovery": []
+            },
+            "appraisedSlots": []
+          },
+          "lot-10": {
+            "clues": {
+              "Authenticity": [],
+              "Condition": [],
+              "History": [],
+              "Discovery": [
+                "A faint inscription appears only in raking light."
+              ]
+            },
+            "appraisedSlots": [
+              "Authenticity",
+              "Condition",
+              "History",
+              "Discovery"
+            ]
+          }
+        }
+      }
+    ],
+    "items": [
+      {
+        "id": "lot-1",
+        "templateId": "cabinet",
+        "name": "Astronomer’s Cabinet",
+        "description": "A narrow walnut cabinet with shallow drawers and a star-patterned inlay. The drawers are lined in faded blue felt.",
+        "category": "Furniture",
+        "baseValue": 140000,
+        "lot": 1,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-genuine",
+            "truth": "An authentic example from its advertised period.",
+            "clues": [
+              "Tool marks are consistent with period manufacturing methods.",
+              "Wear appears continuous across both exposed and protected surfaces.",
+              "The materials match examples in an old reference catalog."
+            ],
+            "valueModifier": 50000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-exceptional",
+            "truth": "Exceptional original condition, suitable for a major collection.",
+            "clues": [
+              "Even the most fragile details appear undisturbed.",
+              "A conservator’s old storage note recommends minimal intervention.",
+              "The least accessible surfaces look almost untouched."
+            ],
+            "valueModifier": 75000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-collector",
+            "truth": "Documented ownership by an influential private collector.",
+            "clues": [
+              "A collection number matches the format used by a prominent estate.",
+              "An old label shares a distinctive typeface with a known collection.",
+              "A receipt mentions a buyer whose surname appears in collecting journals."
+            ],
+            "valueModifier": 40000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-inlay",
+            "truth": "An overlooked decorative detail contains precious metal.",
+            "clues": [
+              "A small accent has tarnished differently from neighboring materials.",
+              "One decorative part feels denser than its size suggests.",
+              "A worn corner exposes an unexpected color beneath the surface."
+            ],
+            "valueModifier": 65000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-1",
+        "purchasePrice": 196000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-2",
+        "templateId": "footlocker",
+        "name": "Military Footlocker",
+        "description": "An olive-green field locker with reinforced corners. Stenciled lettering has worn away, leaving only fragments of a name and number.",
+        "category": "Military",
+        "baseValue": 90000,
+        "lot": 2,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-counterfeit",
+            "truth": "A deliberate counterfeit with fabricated identifying marks.",
+            "clues": [
+              "An identifying mark sits over a scratch rather than beneath it.",
+              "The maker’s lettering differs slightly from archived examples.",
+              "A patch of surface aging looks unusually regular."
+            ],
+            "valueModifier": -110000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-preserved",
+            "truth": "Well preserved, with stable materials and only minor wear.",
+            "clues": [
+              "Protected areas retain much of their original finish.",
+              "Delicate edges remain surprisingly sharp.",
+              "There are few signs of repairs around the most vulnerable areas."
+            ],
+            "valueModifier": 35000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-collector",
+            "truth": "Documented ownership by an influential private collector.",
+            "clues": [
+              "A collection number matches the format used by a prominent estate.",
+              "An old label shares a distinctive typeface with a known collection.",
+              "A receipt mentions a buyer whose surname appears in collecting journals."
+            ],
+            "valueModifier": 40000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-inlay",
+            "truth": "An overlooked decorative detail contains precious metal.",
+            "clues": [
+              "A small accent has tarnished differently from neighboring materials.",
+              "One decorative part feels denser than its size suggests.",
+              "A worn corner exposes an unexpected color beneath the surface."
+            ],
+            "valueModifier": 65000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-4",
+        "purchasePrice": 159000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-3",
+        "templateId": "telescope",
+        "name": "Antique Telescope",
+        "description": "A brass telescope on a folding wooden stand. The barrel bears a small maker’s plate and a series of carefully engraved markings.",
+        "category": "Instrument",
+        "baseValue": 180000,
+        "lot": 3,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-altered",
+            "truth": "An older object substantially altered with replacement parts.",
+            "clues": [
+              "The finish changes subtly around several joins.",
+              "Two sections show noticeably different patterns of wear.",
+              "Some fasteners do not match the rest of the construction."
+            ],
+            "valueModifier": -35000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-exceptional",
+            "truth": "Exceptional original condition, suitable for a major collection.",
+            "clues": [
+              "Even the most fragile details appear undisturbed.",
+              "A conservator’s old storage note recommends minimal intervention.",
+              "The least accessible surfaces look almost untouched."
+            ],
+            "valueModifier": 75000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-collector",
+            "truth": "Documented ownership by an influential private collector.",
+            "clues": [
+              "A collection number matches the format used by a prominent estate.",
+              "An old label shares a distinctive typeface with a known collection.",
+              "A receipt mentions a buyer whose surname appears in collecting journals."
+            ],
+            "valueModifier": 40000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-mark",
+            "truth": "A concealed workshop signature adds significant collector interest.",
+            "clues": [
+              "A few deliberate strokes are visible on a protected inner edge.",
+              "An inconspicuous underside has a small polished patch.",
+              "A faint inscription appears only in raking light."
+            ],
+            "valueModifier": 45000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-3",
+        "purchasePrice": 191000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-4",
+        "templateId": "painting",
+        "name": "Dusty Oil Painting",
+        "description": "A quiet coastal scene in a dark wooden frame. A layer of dust softens the colors, and the reverse is covered with old backing paper.",
+        "category": "Artwork",
+        "baseValue": 150000,
+        "lot": 4,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-altered",
+            "truth": "An older object substantially altered with replacement parts.",
+            "clues": [
+              "The finish changes subtly around several joins.",
+              "Two sections show noticeably different patterns of wear.",
+              "Some fasteners do not match the rest of the construction."
+            ],
+            "valueModifier": -35000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-damaged",
+            "truth": "Severe structural damage requires specialist restoration.",
+            "clues": [
+              "A faint crack continues beneath a reinforced section.",
+              "There is movement at a joint that should be rigid.",
+              "A concealed surface shows signs of prolonged moisture exposure."
+            ],
+            "valueModifier": -85000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-voyage",
+            "truth": "Documented connection to a significant historic expedition.",
+            "clues": [
+              "A faded inventory code resembles an expedition supply manifest.",
+              "A port stamp is dated just before a well-known departure.",
+              "An archival photograph includes a remarkably similar silhouette."
+            ],
+            "valueModifier": 80000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-label",
+            "truth": "A rare original exhibition label is preserved beneath a later label.",
+            "clues": [
+              "One paper label appears to have another layer beneath it.",
+              "A sliver of ornate printing extends beyond a plain inventory sticker.",
+              "A paper edge is thicker than expected."
+            ],
+            "valueModifier": 30000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-2",
+        "purchasePrice": 160000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-5",
+        "templateId": "chest",
+        "name": "Locked Sea Chest",
+        "description": "An iron-bound wooden chest with a salt-worn finish. Its brass lock is closed, and a faded shipping label clings to one side.",
+        "category": "Container",
+        "baseValue": 120000,
+        "lot": 5,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-counterfeit",
+            "truth": "A deliberate counterfeit with fabricated identifying marks.",
+            "clues": [
+              "An identifying mark sits over a scratch rather than beneath it.",
+              "The maker’s lettering differs slightly from archived examples.",
+              "A patch of surface aging looks unusually regular."
+            ],
+            "valueModifier": -110000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-average",
+            "truth": "Average condition for its age, with ordinary wear.",
+            "clues": [
+              "Most wear is concentrated where you would expect handling.",
+              "The surfaces show a mixture of small scratches and intact finish.",
+              "Routine maintenance appears to have kept deterioration in check."
+            ],
+            "valueModifier": 0,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-voyage",
+            "truth": "Documented connection to a significant historic expedition.",
+            "clues": [
+              "A faded inventory code resembles an expedition supply manifest.",
+              "A port stamp is dated just before a well-known departure.",
+              "An archival photograph includes a remarkably similar silhouette."
+            ],
+            "valueModifier": 80000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-mark",
+            "truth": "A concealed workshop signature adds significant collector interest.",
+            "clues": [
+              "A few deliberate strokes are visible on a protected inner edge.",
+              "An inconspicuous underside has a small polished patch.",
+              "A faint inscription appears only in raking light."
+            ],
+            "valueModifier": 45000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-1",
+        "purchasePrice": 184000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-6",
+        "templateId": "footlocker",
+        "name": "Military Footlocker",
+        "description": "An olive-green field locker with reinforced corners. Stenciled lettering has worn away, leaving only fragments of a name and number.",
+        "category": "Military",
+        "baseValue": 90000,
+        "lot": 6,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-counterfeit",
+            "truth": "A deliberate counterfeit with fabricated identifying marks.",
+            "clues": [
+              "An identifying mark sits over a scratch rather than beneath it.",
+              "The maker’s lettering differs slightly from archived examples.",
+              "A patch of surface aging looks unusually regular."
+            ],
+            "valueModifier": -110000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-damaged",
+            "truth": "Severe structural damage requires specialist restoration.",
+            "clues": [
+              "A faint crack continues beneath a reinforced section.",
+              "There is movement at a joint that should be rigid.",
+              "A concealed surface shows signs of prolonged moisture exposure."
+            ],
+            "valueModifier": -85000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-none",
+            "truth": "No meaningful documented provenance survives.",
+            "clues": [
+              "The paper trail stops at an ordinary estate sale.",
+              "Previous inventory records list only a generic description.",
+              "The most recent dealer could not locate earlier ownership records."
+            ],
+            "valueModifier": 0,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-none",
+            "truth": "A complete inspection reveals no additional contents or features.",
+            "clues": [
+              "The visible construction accounts for nearly all of its weight.",
+              "No unexplained gaps appear during a careful surface inspection.",
+              "Its dimensions closely match an ordinary catalog example."
+            ],
+            "valueModifier": 0,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-4",
+        "purchasePrice": 131000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-7",
+        "templateId": "telescope",
+        "name": "Antique Telescope",
+        "description": "A brass telescope on a folding wooden stand. The barrel bears a small maker’s plate and a series of carefully engraved markings.",
+        "category": "Instrument",
+        "baseValue": 180000,
+        "lot": 7,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-rare",
+            "truth": "An unusually rare authentic example from a short production run.",
+            "clues": [
+              "An obscure design detail appears in an early workshop drawing.",
+              "The maker’s mark includes a seldom-recorded variation.",
+              "A tiny construction feature is absent from common examples."
+            ],
+            "valueModifier": 130000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-damaged",
+            "truth": "Severe structural damage requires specialist restoration.",
+            "clues": [
+              "A faint crack continues beneath a reinforced section.",
+              "There is movement at a joint that should be rigid.",
+              "A concealed surface shows signs of prolonged moisture exposure."
+            ],
+            "valueModifier": -85000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-none",
+            "truth": "No meaningful documented provenance survives.",
+            "clues": [
+              "The paper trail stops at an ordinary estate sale.",
+              "Previous inventory records list only a generic description.",
+              "The most recent dealer could not locate earlier ownership records."
+            ],
+            "valueModifier": 0,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-label",
+            "truth": "A rare original exhibition label is preserved beneath a later label.",
+            "clues": [
+              "One paper label appears to have another layer beneath it.",
+              "A sliver of ornate printing extends beyond a plain inventory sticker.",
+              "A paper edge is thicker than expected."
+            ],
+            "valueModifier": 30000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-3",
+        "purchasePrice": 174000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-8",
+        "templateId": "chest",
+        "name": "Locked Sea Chest",
+        "description": "An iron-bound wooden chest with a salt-worn finish. Its brass lock is closed, and a faded shipping label clings to one side.",
+        "category": "Container",
+        "baseValue": 120000,
+        "lot": 8,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-counterfeit",
+            "truth": "A deliberate counterfeit with fabricated identifying marks.",
+            "clues": [
+              "An identifying mark sits over a scratch rather than beneath it.",
+              "The maker’s lettering differs slightly from archived examples.",
+              "A patch of surface aging looks unusually regular."
+            ],
+            "valueModifier": -110000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-average",
+            "truth": "Average condition for its age, with ordinary wear.",
+            "clues": [
+              "Most wear is concentrated where you would expect handling.",
+              "The surfaces show a mixture of small scratches and intact finish.",
+              "Routine maintenance appears to have kept deterioration in check."
+            ],
+            "valueModifier": 0,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-collector",
+            "truth": "Documented ownership by an influential private collector.",
+            "clues": [
+              "A collection number matches the format used by a prominent estate.",
+              "An old label shares a distinctive typeface with a known collection.",
+              "A receipt mentions a buyer whose surname appears in collecting journals."
+            ],
+            "valueModifier": 40000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-coins",
+            "truth": "Silver coins are concealed beneath a false bottom.",
+            "clues": [
+              "The bottom sounds slightly hollow when tapped.",
+              "Unusual weight is concentrated low in the object.",
+              "A lower panel does not sit perfectly flush."
+            ],
+            "valueModifier": 85000,
+            "compatibleCategories": [
+              "Container",
+              "Furniture",
+              "Military"
+            ]
+          }
+        },
+        "ownerId": "player-2",
+        "purchasePrice": 86000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-9",
+        "templateId": "cabinet",
+        "name": "Astronomer’s Cabinet",
+        "description": "A narrow walnut cabinet with shallow drawers and a star-patterned inlay. The drawers are lined in faded blue felt.",
+        "category": "Furniture",
+        "baseValue": 140000,
+        "lot": 9,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-altered",
+            "truth": "An older object substantially altered with replacement parts.",
+            "clues": [
+              "The finish changes subtly around several joins.",
+              "Two sections show noticeably different patterns of wear.",
+              "Some fasteners do not match the rest of the construction."
+            ],
+            "valueModifier": -35000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-exceptional",
+            "truth": "Exceptional original condition, suitable for a major collection.",
+            "clues": [
+              "Even the most fragile details appear undisturbed.",
+              "A conservator’s old storage note recommends minimal intervention.",
+              "The least accessible surfaces look almost untouched."
+            ],
+            "valueModifier": 75000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-collector",
+            "truth": "Documented ownership by an influential private collector.",
+            "clues": [
+              "A collection number matches the format used by a prominent estate.",
+              "An old label shares a distinctive typeface with a known collection.",
+              "A receipt mentions a buyer whose surname appears in collecting journals."
+            ],
+            "valueModifier": 40000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-mark",
+            "truth": "A concealed workshop signature adds significant collector interest.",
+            "clues": [
+              "A few deliberate strokes are visible on a protected inner edge.",
+              "An inconspicuous underside has a small polished patch.",
+              "A faint inscription appears only in raking light."
+            ],
+            "valueModifier": 45000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-2",
+        "purchasePrice": 86000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      },
+      {
+        "id": "lot-10",
+        "templateId": "painting",
+        "name": "Dusty Oil Painting",
+        "description": "A quiet coastal scene in a dark wooden frame. A layer of dust softens the colors, and the reverse is covered with old backing paper.",
+        "category": "Artwork",
+        "baseValue": 150000,
+        "lot": 10,
+        "hidden": {
+          "Authenticity": {
+            "id": "auth-misidentified",
+            "truth": "A genuine object attributed to the wrong, more valuable workshop.",
+            "clues": [
+              "Its regional styling conflicts with the auction catalog attribution.",
+              "The maker’s initials could be read in more than one way.",
+              "A construction detail resembles the work of a neighboring workshop."
+            ],
+            "valueModifier": -50000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Condition": {
+            "id": "condition-exceptional",
+            "truth": "Exceptional original condition, suitable for a major collection.",
+            "clues": [
+              "Even the most fragile details appear undisturbed.",
+              "A conservator’s old storage note recommends minimal intervention.",
+              "The least accessible surfaces look almost untouched."
+            ],
+            "valueModifier": 75000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "History": {
+            "id": "history-collector",
+            "truth": "Documented ownership by an influential private collector.",
+            "clues": [
+              "A collection number matches the format used by a prominent estate.",
+              "An old label shares a distinctive typeface with a known collection.",
+              "A receipt mentions a buyer whose surname appears in collecting journals."
+            ],
+            "valueModifier": 40000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          },
+          "Discovery": {
+            "id": "discovery-mark",
+            "truth": "A concealed workshop signature adds significant collector interest.",
+            "clues": [
+              "A few deliberate strokes are visible on a protected inner edge.",
+              "An inconspicuous underside has a small polished patch.",
+              "A faint inscription appears only in raking light."
+            ],
+            "valueModifier": 45000,
+            "compatibleCategories": [
+              "Container",
+              "Artwork",
+              "Instrument",
+              "Document",
+              "Collectible",
+              "Furniture",
+              "Military",
+              "Scientific"
+            ]
+          }
+        },
+        "ownerId": "player-4",
+        "purchasePrice": 20000,
+        "ownerAppraisedSlots": [
+          "Authenticity",
+          "Condition",
+          "History",
+          "Discovery"
+        ],
+        "forfeited": false
+      }
+    ],
+    "actions": {
+      "player-2": "clue",
+      "player-3": "clue",
+      "player-4": "clue",
+      "player-1": "clue"
+    },
+    "appraisalDone": [
+      "player-2",
+      "player-3",
+      "player-4",
+      "player-1"
+    ],
+    "loans": [],
+    "consignment": null,
+    "bidding": null,
+    "log": [
+      {
+        "id": "event-1",
+        "round": 1,
+        "text": "The auction house is open. Four collectors, 10 mysteries."
+      },
+      {
+        "id": "event-2",
+        "round": 1,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-3",
+        "round": 1,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-4",
+        "round": 1,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-5",
+        "round": 1,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-6",
+        "round": 1,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-7",
+        "round": 1,
+        "text": "Bidding is open for lot 1."
+      },
+      {
+        "id": "event-8",
+        "round": 1,
+        "text": "Player 1 bid $20,000 on lot 1."
+      },
+      {
+        "id": "event-9",
+        "round": 1,
+        "text": "Clara bid $25,000 on lot 1."
+      },
+      {
+        "id": "event-10",
+        "round": 1,
+        "text": "Jules bid $30,000 on lot 1."
+      },
+      {
+        "id": "event-11",
+        "round": 1,
+        "text": "Remy bid $35,000 on lot 1."
+      },
+      {
+        "id": "event-12",
+        "round": 1,
+        "text": "Player 1 bid $40,000 on lot 1."
+      },
+      {
+        "id": "event-13",
+        "round": 1,
+        "text": "Clara bid $45,000 on lot 1."
+      },
+      {
+        "id": "event-14",
+        "round": 1,
+        "text": "Jules bid $50,000 on lot 1."
+      },
+      {
+        "id": "event-15",
+        "round": 1,
+        "text": "Remy bid $55,000 on lot 1."
+      },
+      {
+        "id": "event-16",
+        "round": 1,
+        "text": "Player 1 bid $60,000 on lot 1."
+      },
+      {
+        "id": "event-17",
+        "round": 1,
+        "text": "Clara bid $65,000 on lot 1."
+      },
+      {
+        "id": "event-18",
+        "round": 1,
+        "text": "Jules bid $70,000 on lot 1."
+      },
+      {
+        "id": "event-19",
+        "round": 1,
+        "text": "Remy bid $75,000 on lot 1."
+      },
+      {
+        "id": "event-20",
+        "round": 1,
+        "text": "Player 1 bid $100,000 on lot 1."
+      },
+      {
+        "id": "event-21",
+        "round": 1,
+        "text": "Clara bid $105,000 on lot 1."
+      },
+      {
+        "id": "event-22",
+        "round": 1,
+        "text": "Jules bid $110,000 on lot 1."
+      },
+      {
+        "id": "event-23",
+        "round": 1,
+        "text": "Remy bid $115,000 on lot 1."
+      },
+      {
+        "id": "event-24",
+        "round": 1,
+        "text": "Player 1 bid $116,000 on lot 1."
+      },
+      {
+        "id": "event-25",
+        "round": 1,
+        "text": "Clara bid $121,000 on lot 1."
+      },
+      {
+        "id": "event-26",
+        "round": 1,
+        "text": "Jules bid $126,000 on lot 1."
+      },
+      {
+        "id": "event-27",
+        "round": 1,
+        "text": "Remy bid $131,000 on lot 1."
+      },
+      {
+        "id": "event-28",
+        "round": 1,
+        "text": "Player 1 bid $132,000 on lot 1."
+      },
+      {
+        "id": "event-29",
+        "round": 1,
+        "text": "Clara bid $137,000 on lot 1."
+      },
+      {
+        "id": "event-30",
+        "round": 1,
+        "text": "Jules bid $142,000 on lot 1."
+      },
+      {
+        "id": "event-31",
+        "round": 1,
+        "text": "Remy bid $147,000 on lot 1."
+      },
+      {
+        "id": "event-32",
+        "round": 1,
+        "text": "Player 1 bid $148,000 on lot 1."
+      },
+      {
+        "id": "event-33",
+        "round": 1,
+        "text": "Clara passed on lot 1."
+      },
+      {
+        "id": "event-34",
+        "round": 1,
+        "text": "Jules bid $153,000 on lot 1."
+      },
+      {
+        "id": "event-35",
+        "round": 1,
+        "text": "Remy bid $158,000 on lot 1."
+      },
+      {
+        "id": "event-36",
+        "round": 1,
+        "text": "Player 1 bid $159,000 on lot 1."
+      },
+      {
+        "id": "event-37",
+        "round": 1,
+        "text": "Jules bid $164,000 on lot 1."
+      },
+      {
+        "id": "event-38",
+        "round": 1,
+        "text": "Remy bid $169,000 on lot 1."
+      },
+      {
+        "id": "event-39",
+        "round": 1,
+        "text": "Player 1 bid $170,000 on lot 1."
+      },
+      {
+        "id": "event-40",
+        "round": 1,
+        "text": "Jules passed on lot 1."
+      },
+      {
+        "id": "event-41",
+        "round": 1,
+        "text": "Remy bid $175,000 on lot 1."
+      },
+      {
+        "id": "event-42",
+        "round": 1,
+        "text": "Player 1 bid $176,000 on lot 1."
+      },
+      {
+        "id": "event-43",
+        "round": 1,
+        "text": "Remy bid $181,000 on lot 1."
+      },
+      {
+        "id": "event-44",
+        "round": 1,
+        "text": "Player 1 bid $182,000 on lot 1."
+      },
+      {
+        "id": "event-45",
+        "round": 1,
+        "text": "Remy bid $187,000 on lot 1."
+      },
+      {
+        "id": "event-46",
+        "round": 1,
+        "text": "Player 1 bid $188,000 on lot 1."
+      },
+      {
+        "id": "event-47",
+        "round": 1,
+        "text": "Remy bid $193,000 on lot 1."
+      },
+      {
+        "id": "event-48",
+        "round": 1,
+        "text": "Player 1 bid $194,000 on lot 1."
+      },
+      {
+        "id": "event-49",
+        "round": 1,
+        "text": "Remy bid $195,000 on lot 1."
+      },
+      {
+        "id": "event-50",
+        "round": 1,
+        "text": "Player 1 bid $196,000 on lot 1."
+      },
+      {
+        "id": "event-51",
+        "round": 1,
+        "text": "Remy passed on lot 1."
+      },
+      {
+        "id": "event-52",
+        "round": 1,
+        "text": "Player 1 won lot 1 for $196,000."
+      },
+      {
+        "id": "event-53",
+        "round": 1,
+        "text": "Player 1 purchased a full appraisal of lot 1 for $25,000."
+      },
+      {
+        "id": "event-54",
+        "round": 2,
+        "text": "Lot 2 is now on the block."
+      },
+      {
+        "id": "event-55",
+        "round": 2,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-56",
+        "round": 2,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-57",
+        "round": 2,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-58",
+        "round": 2,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-59",
+        "round": 2,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-60",
+        "round": 2,
+        "text": "Bidding is open for lot 2."
+      },
+      {
+        "id": "event-61",
+        "round": 2,
+        "text": "Player 1 passed on lot 2."
+      },
+      {
+        "id": "event-62",
+        "round": 2,
+        "text": "Clara bid $1,000 on lot 2."
+      },
+      {
+        "id": "event-63",
+        "round": 2,
+        "text": "Jules bid $6,000 on lot 2."
+      },
+      {
+        "id": "event-64",
+        "round": 2,
+        "text": "Remy bid $11,000 on lot 2."
+      },
+      {
+        "id": "event-65",
+        "round": 2,
+        "text": "Clara bid $16,000 on lot 2."
+      },
+      {
+        "id": "event-66",
+        "round": 2,
+        "text": "Jules bid $21,000 on lot 2."
+      },
+      {
+        "id": "event-67",
+        "round": 2,
+        "text": "Remy bid $26,000 on lot 2."
+      },
+      {
+        "id": "event-68",
+        "round": 2,
+        "text": "Clara bid $31,000 on lot 2."
+      },
+      {
+        "id": "event-69",
+        "round": 2,
+        "text": "Jules bid $36,000 on lot 2."
+      },
+      {
+        "id": "event-70",
+        "round": 2,
+        "text": "Remy bid $41,000 on lot 2."
+      },
+      {
+        "id": "event-71",
+        "round": 2,
+        "text": "Clara bid $46,000 on lot 2."
+      },
+      {
+        "id": "event-72",
+        "round": 2,
+        "text": "Jules bid $51,000 on lot 2."
+      },
+      {
+        "id": "event-73",
+        "round": 2,
+        "text": "Remy bid $56,000 on lot 2."
+      },
+      {
+        "id": "event-74",
+        "round": 2,
+        "text": "Clara bid $61,000 on lot 2."
+      },
+      {
+        "id": "event-75",
+        "round": 2,
+        "text": "Jules bid $66,000 on lot 2."
+      },
+      {
+        "id": "event-76",
+        "round": 2,
+        "text": "Remy bid $71,000 on lot 2."
+      },
+      {
+        "id": "event-77",
+        "round": 2,
+        "text": "Clara bid $76,000 on lot 2."
+      },
+      {
+        "id": "event-78",
+        "round": 2,
+        "text": "Jules bid $81,000 on lot 2."
+      },
+      {
+        "id": "event-79",
+        "round": 2,
+        "text": "Remy bid $86,000 on lot 2."
+      },
+      {
+        "id": "event-80",
+        "round": 2,
+        "text": "Clara bid $91,000 on lot 2."
+      },
+      {
+        "id": "event-81",
+        "round": 2,
+        "text": "Jules bid $96,000 on lot 2."
+      },
+      {
+        "id": "event-82",
+        "round": 2,
+        "text": "Remy bid $101,000 on lot 2."
+      },
+      {
+        "id": "event-83",
+        "round": 2,
+        "text": "Clara bid $106,000 on lot 2."
+      },
+      {
+        "id": "event-84",
+        "round": 2,
+        "text": "Jules bid $111,000 on lot 2."
+      },
+      {
+        "id": "event-85",
+        "round": 2,
+        "text": "Remy bid $116,000 on lot 2."
+      },
+      {
+        "id": "event-86",
+        "round": 2,
+        "text": "Clara bid $121,000 on lot 2."
+      },
+      {
+        "id": "event-87",
+        "round": 2,
+        "text": "Jules bid $126,000 on lot 2."
+      },
+      {
+        "id": "event-88",
+        "round": 2,
+        "text": "Remy bid $131,000 on lot 2."
+      },
+      {
+        "id": "event-89",
+        "round": 2,
+        "text": "Clara bid $136,000 on lot 2."
+      },
+      {
+        "id": "event-90",
+        "round": 2,
+        "text": "Jules bid $141,000 on lot 2."
+      },
+      {
+        "id": "event-91",
+        "round": 2,
+        "text": "Remy bid $146,000 on lot 2."
+      },
+      {
+        "id": "event-92",
+        "round": 2,
+        "text": "Clara bid $151,000 on lot 2."
+      },
+      {
+        "id": "event-93",
+        "round": 2,
+        "text": "Jules bid $154,000 on lot 2."
+      },
+      {
+        "id": "event-94",
+        "round": 2,
+        "text": "Remy bid $159,000 on lot 2."
+      },
+      {
+        "id": "event-95",
+        "round": 2,
+        "text": "Clara passed on lot 2."
+      },
+      {
+        "id": "event-96",
+        "round": 2,
+        "text": "Jules passed on lot 2."
+      },
+      {
+        "id": "event-97",
+        "round": 2,
+        "text": "Remy won lot 2 for $159,000."
+      },
+      {
+        "id": "event-98",
+        "round": 2,
+        "text": "Remy purchased a full appraisal of lot 2 for $25,000."
+      },
+      {
+        "id": "event-99",
+        "round": 2,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-100",
+        "round": 3,
+        "text": "Lot 3 is now on the block."
+      },
+      {
+        "id": "event-101",
+        "round": 3,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-102",
+        "round": 3,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-103",
+        "round": 3,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-104",
+        "round": 3,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-105",
+        "round": 3,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-106",
+        "round": 3,
+        "text": "Bidding is open for lot 3."
+      },
+      {
+        "id": "event-107",
+        "round": 3,
+        "text": "Player 1 bid $10,000 on lot 3."
+      },
+      {
+        "id": "event-108",
+        "round": 3,
+        "text": "Clara bid $15,000 on lot 3."
+      },
+      {
+        "id": "event-109",
+        "round": 3,
+        "text": "Jules bid $20,000 on lot 3."
+      },
+      {
+        "id": "event-110",
+        "round": 3,
+        "text": "Remy bid $25,000 on lot 3."
+      },
+      {
+        "id": "event-111",
+        "round": 3,
+        "text": "Player 1 bid $26,000 on lot 3."
+      },
+      {
+        "id": "event-112",
+        "round": 3,
+        "text": "Clara bid $31,000 on lot 3."
+      },
+      {
+        "id": "event-113",
+        "round": 3,
+        "text": "Jules bid $36,000 on lot 3."
+      },
+      {
+        "id": "event-114",
+        "round": 3,
+        "text": "Remy bid $41,000 on lot 3."
+      },
+      {
+        "id": "event-115",
+        "round": 3,
+        "text": "Player 1 bid $42,000 on lot 3."
+      },
+      {
+        "id": "event-116",
+        "round": 3,
+        "text": "Clara bid $47,000 on lot 3."
+      },
+      {
+        "id": "event-117",
+        "round": 3,
+        "text": "Jules bid $52,000 on lot 3."
+      },
+      {
+        "id": "event-118",
+        "round": 3,
+        "text": "Remy bid $57,000 on lot 3."
+      },
+      {
+        "id": "event-119",
+        "round": 3,
+        "text": "Player 1 bid $58,000 on lot 3."
+      },
+      {
+        "id": "event-120",
+        "round": 3,
+        "text": "Clara bid $63,000 on lot 3."
+      },
+      {
+        "id": "event-121",
+        "round": 3,
+        "text": "Jules bid $68,000 on lot 3."
+      },
+      {
+        "id": "event-122",
+        "round": 3,
+        "text": "Remy bid $73,000 on lot 3."
+      },
+      {
+        "id": "event-123",
+        "round": 3,
+        "text": "Player 1 bid $74,000 on lot 3."
+      },
+      {
+        "id": "event-124",
+        "round": 3,
+        "text": "Clara bid $79,000 on lot 3."
+      },
+      {
+        "id": "event-125",
+        "round": 3,
+        "text": "Jules bid $84,000 on lot 3."
+      },
+      {
+        "id": "event-126",
+        "round": 3,
+        "text": "Remy bid $89,000 on lot 3."
+      },
+      {
+        "id": "event-127",
+        "round": 3,
+        "text": "Player 1 bid $120,000 on lot 3."
+      },
+      {
+        "id": "event-128",
+        "round": 3,
+        "text": "Clara bid $125,000 on lot 3."
+      },
+      {
+        "id": "event-129",
+        "round": 3,
+        "text": "Jules bid $130,000 on lot 3."
+      },
+      {
+        "id": "event-130",
+        "round": 3,
+        "text": "Remy bid $135,000 on lot 3."
+      },
+      {
+        "id": "event-131",
+        "round": 3,
+        "text": "Player 1 bid $136,000 on lot 3."
+      },
+      {
+        "id": "event-132",
+        "round": 3,
+        "text": "Clara bid $141,000 on lot 3."
+      },
+      {
+        "id": "event-133",
+        "round": 3,
+        "text": "Jules bid $146,000 on lot 3."
+      },
+      {
+        "id": "event-134",
+        "round": 3,
+        "text": "Remy passed on lot 3."
+      },
+      {
+        "id": "event-135",
+        "round": 3,
+        "text": "Player 1 bid $147,000 on lot 3."
+      },
+      {
+        "id": "event-136",
+        "round": 3,
+        "text": "Clara bid $152,000 on lot 3."
+      },
+      {
+        "id": "event-137",
+        "round": 3,
+        "text": "Jules bid $157,000 on lot 3."
+      },
+      {
+        "id": "event-138",
+        "round": 3,
+        "text": "Player 1 bid $158,000 on lot 3."
+      },
+      {
+        "id": "event-139",
+        "round": 3,
+        "text": "Clara bid $163,000 on lot 3."
+      },
+      {
+        "id": "event-140",
+        "round": 3,
+        "text": "Jules bid $168,000 on lot 3."
+      },
+      {
+        "id": "event-141",
+        "round": 3,
+        "text": "Player 1 bid $169,000 on lot 3."
+      },
+      {
+        "id": "event-142",
+        "round": 3,
+        "text": "Clara bid $174,000 on lot 3."
+      },
+      {
+        "id": "event-143",
+        "round": 3,
+        "text": "Jules bid $179,000 on lot 3."
+      },
+      {
+        "id": "event-144",
+        "round": 3,
+        "text": "Player 1 bid $180,000 on lot 3."
+      },
+      {
+        "id": "event-145",
+        "round": 3,
+        "text": "Clara passed on lot 3."
+      },
+      {
+        "id": "event-146",
+        "round": 3,
+        "text": "Jules bid $185,000 on lot 3."
+      },
+      {
+        "id": "event-147",
+        "round": 3,
+        "text": "Player 1 bid $186,000 on lot 3."
+      },
+      {
+        "id": "event-148",
+        "round": 3,
+        "text": "Jules bid $191,000 on lot 3."
+      },
+      {
+        "id": "event-149",
+        "round": 3,
+        "text": "Player 1 passed on lot 3."
+      },
+      {
+        "id": "event-150",
+        "round": 3,
+        "text": "Jules won lot 3 for $191,000."
+      },
+      {
+        "id": "event-151",
+        "round": 3,
+        "text": "Jules purchased a full appraisal of lot 3 for $25,000."
+      },
+      {
+        "id": "event-152",
+        "round": 3,
+        "text": "Remy passed the appraisal window."
+      },
+      {
+        "id": "event-153",
+        "round": 3,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-154",
+        "round": 4,
+        "text": "Lot 4 is now on the block."
+      },
+      {
+        "id": "event-155",
+        "round": 4,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-156",
+        "round": 4,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-157",
+        "round": 4,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-158",
+        "round": 4,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-159",
+        "round": 4,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-160",
+        "round": 4,
+        "text": "Bidding is open for lot 4."
+      },
+      {
+        "id": "event-161",
+        "round": 4,
+        "text": "Player 1 bid $100,000 on lot 4."
+      },
+      {
+        "id": "event-162",
+        "round": 4,
+        "text": "Clara bid $105,000 on lot 4."
+      },
+      {
+        "id": "event-163",
+        "round": 4,
+        "text": "Jules bid $110,000 on lot 4."
+      },
+      {
+        "id": "event-164",
+        "round": 4,
+        "text": "Remy bid $115,000 on lot 4."
+      },
+      {
+        "id": "event-165",
+        "round": 4,
+        "text": "Player 1 passed on lot 4."
+      },
+      {
+        "id": "event-166",
+        "round": 4,
+        "text": "Clara bid $120,000 on lot 4."
+      },
+      {
+        "id": "event-167",
+        "round": 4,
+        "text": "Jules passed on lot 4."
+      },
+      {
+        "id": "event-168",
+        "round": 4,
+        "text": "Remy bid $125,000 on lot 4."
+      },
+      {
+        "id": "event-169",
+        "round": 4,
+        "text": "Clara bid $130,000 on lot 4."
+      },
+      {
+        "id": "event-170",
+        "round": 4,
+        "text": "Remy bid $135,000 on lot 4."
+      },
+      {
+        "id": "event-171",
+        "round": 4,
+        "text": "Clara bid $140,000 on lot 4."
+      },
+      {
+        "id": "event-172",
+        "round": 4,
+        "text": "Remy bid $145,000 on lot 4."
+      },
+      {
+        "id": "event-173",
+        "round": 4,
+        "text": "Clara bid $150,000 on lot 4."
+      },
+      {
+        "id": "event-174",
+        "round": 4,
+        "text": "Remy bid $155,000 on lot 4."
+      },
+      {
+        "id": "event-175",
+        "round": 4,
+        "text": "Clara bid $160,000 on lot 4."
+      },
+      {
+        "id": "event-176",
+        "round": 4,
+        "text": "Remy passed on lot 4."
+      },
+      {
+        "id": "event-177",
+        "round": 4,
+        "text": "Clara won lot 4 for $160,000."
+      },
+      {
+        "id": "event-178",
+        "round": 4,
+        "text": "Clara purchased a full appraisal of lot 4 for $25,000."
+      },
+      {
+        "id": "event-179",
+        "round": 4,
+        "text": "Jules passed the appraisal window."
+      },
+      {
+        "id": "event-180",
+        "round": 4,
+        "text": "Remy passed the appraisal window."
+      },
+      {
+        "id": "event-181",
+        "round": 4,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-182",
+        "round": 5,
+        "text": "Lot 5 is now on the block."
+      },
+      {
+        "id": "event-183",
+        "round": 5,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-184",
+        "round": 5,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-185",
+        "round": 5,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-186",
+        "round": 5,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-187",
+        "round": 5,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-188",
+        "round": 5,
+        "text": "Bidding is open for lot 5."
+      },
+      {
+        "id": "event-189",
+        "round": 5,
+        "text": "Player 1 bid $120,000 on lot 5."
+      },
+      {
+        "id": "event-190",
+        "round": 5,
+        "text": "Clara passed on lot 5."
+      },
+      {
+        "id": "event-191",
+        "round": 5,
+        "text": "Jules bid $125,000 on lot 5."
+      },
+      {
+        "id": "event-192",
+        "round": 5,
+        "text": "Remy bid $130,000 on lot 5."
+      },
+      {
+        "id": "event-193",
+        "round": 5,
+        "text": "Player 1 bid $131,000 on lot 5."
+      },
+      {
+        "id": "event-194",
+        "round": 5,
+        "text": "Jules bid $136,000 on lot 5."
+      },
+      {
+        "id": "event-195",
+        "round": 5,
+        "text": "Remy bid $141,000 on lot 5."
+      },
+      {
+        "id": "event-196",
+        "round": 5,
+        "text": "Player 1 bid $142,000 on lot 5."
+      },
+      {
+        "id": "event-197",
+        "round": 5,
+        "text": "Jules passed on lot 5."
+      },
+      {
+        "id": "event-198",
+        "round": 5,
+        "text": "Remy bid $147,000 on lot 5."
+      },
+      {
+        "id": "event-199",
+        "round": 5,
+        "text": "Player 1 bid $148,000 on lot 5."
+      },
+      {
+        "id": "event-200",
+        "round": 5,
+        "text": "Remy bid $153,000 on lot 5."
+      },
+      {
+        "id": "event-201",
+        "round": 5,
+        "text": "Player 1 bid $154,000 on lot 5."
+      },
+      {
+        "id": "event-202",
+        "round": 5,
+        "text": "Remy bid $159,000 on lot 5."
+      },
+      {
+        "id": "event-203",
+        "round": 5,
+        "text": "Player 1 bid $160,000 on lot 5."
+      },
+      {
+        "id": "event-204",
+        "round": 5,
+        "text": "Remy bid $165,000 on lot 5."
+      },
+      {
+        "id": "event-205",
+        "round": 5,
+        "text": "Player 1 bid $166,000 on lot 5."
+      },
+      {
+        "id": "event-206",
+        "round": 5,
+        "text": "Remy bid $171,000 on lot 5."
+      },
+      {
+        "id": "event-207",
+        "round": 5,
+        "text": "Player 1 bid $172,000 on lot 5."
+      },
+      {
+        "id": "event-208",
+        "round": 5,
+        "text": "Remy bid $177,000 on lot 5."
+      },
+      {
+        "id": "event-209",
+        "round": 5,
+        "text": "Player 1 bid $178,000 on lot 5."
+      },
+      {
+        "id": "event-210",
+        "round": 5,
+        "text": "Remy bid $183,000 on lot 5."
+      },
+      {
+        "id": "event-211",
+        "round": 5,
+        "text": "Player 1 bid $184,000 on lot 5."
+      },
+      {
+        "id": "event-212",
+        "round": 5,
+        "text": "Remy passed on lot 5."
+      },
+      {
+        "id": "event-213",
+        "round": 5,
+        "text": "Player 1 won lot 5 for $184,000."
+      },
+      {
+        "id": "event-214",
+        "round": 5,
+        "text": "Clara passed the appraisal window."
+      },
+      {
+        "id": "event-215",
+        "round": 5,
+        "text": "Jules passed the appraisal window."
+      },
+      {
+        "id": "event-216",
+        "round": 5,
+        "text": "Remy passed the appraisal window."
+      },
+      {
+        "id": "event-217",
+        "round": 5,
+        "text": "Player 1 purchased a full appraisal of lot 5 for $25,000."
+      },
+      {
+        "id": "event-218",
+        "round": 6,
+        "text": "Lot 6 is now on the block."
+      },
+      {
+        "id": "event-219",
+        "round": 6,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-220",
+        "round": 6,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-221",
+        "round": 6,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-222",
+        "round": 6,
+        "text": "Player 1 consigned lot 5. The reserve is private."
+      },
+      {
+        "id": "event-223",
+        "round": 6,
+        "text": "Clara bid $1,000 on resale lot 5."
+      },
+      {
+        "id": "event-224",
+        "round": 6,
+        "text": "Jules bid $6,000 on resale lot 5."
+      },
+      {
+        "id": "event-225",
+        "round": 6,
+        "text": "Remy bid $11,000 on resale lot 5."
+      },
+      {
+        "id": "event-226",
+        "round": 6,
+        "text": "Clara bid $16,000 on resale lot 5."
+      },
+      {
+        "id": "event-227",
+        "round": 6,
+        "text": "Jules bid $21,000 on resale lot 5."
+      },
+      {
+        "id": "event-228",
+        "round": 6,
+        "text": "Remy bid $26,000 on resale lot 5."
+      },
+      {
+        "id": "event-229",
+        "round": 6,
+        "text": "Clara bid $31,000 on resale lot 5."
+      },
+      {
+        "id": "event-230",
+        "round": 6,
+        "text": "Jules bid $36,000 on resale lot 5."
+      },
+      {
+        "id": "event-231",
+        "round": 6,
+        "text": "Remy bid $41,000 on resale lot 5."
+      },
+      {
+        "id": "event-232",
+        "round": 6,
+        "text": "Clara bid $46,000 on resale lot 5."
+      },
+      {
+        "id": "event-233",
+        "round": 6,
+        "text": "Jules bid $51,000 on resale lot 5."
+      },
+      {
+        "id": "event-234",
+        "round": 6,
+        "text": "Remy bid $56,000 on resale lot 5."
+      },
+      {
+        "id": "event-235",
+        "round": 6,
+        "text": "Clara bid $61,000 on resale lot 5."
+      },
+      {
+        "id": "event-236",
+        "round": 6,
+        "text": "Jules bid $66,000 on resale lot 5."
+      },
+      {
+        "id": "event-237",
+        "round": 6,
+        "text": "Remy bid $71,000 on resale lot 5."
+      },
+      {
+        "id": "event-238",
+        "round": 6,
+        "text": "Clara bid $76,000 on resale lot 5."
+      },
+      {
+        "id": "event-239",
+        "round": 6,
+        "text": "Jules bid $81,000 on resale lot 5."
+      },
+      {
+        "id": "event-240",
+        "round": 6,
+        "text": "Remy bid $86,000 on resale lot 5."
+      },
+      {
+        "id": "event-241",
+        "round": 6,
+        "text": "Clara bid $91,000 on resale lot 5."
+      },
+      {
+        "id": "event-242",
+        "round": 6,
+        "text": "Jules bid $96,000 on resale lot 5."
+      },
+      {
+        "id": "event-243",
+        "round": 6,
+        "text": "Remy bid $101,000 on resale lot 5."
+      },
+      {
+        "id": "event-244",
+        "round": 6,
+        "text": "Clara bid $106,000 on resale lot 5."
+      },
+      {
+        "id": "event-245",
+        "round": 6,
+        "text": "Jules bid $111,000 on resale lot 5."
+      },
+      {
+        "id": "event-246",
+        "round": 6,
+        "text": "Remy bid $116,000 on resale lot 5."
+      },
+      {
+        "id": "event-247",
+        "round": 6,
+        "text": "Clara passed on resale lot 5."
+      },
+      {
+        "id": "event-248",
+        "round": 6,
+        "text": "Jules bid $121,000 on resale lot 5."
+      },
+      {
+        "id": "event-249",
+        "round": 6,
+        "text": "Remy bid $126,000 on resale lot 5."
+      },
+      {
+        "id": "event-250",
+        "round": 6,
+        "text": "Jules bid $131,000 on resale lot 5."
+      },
+      {
+        "id": "event-251",
+        "round": 6,
+        "text": "Remy bid $136,000 on resale lot 5."
+      },
+      {
+        "id": "event-252",
+        "round": 6,
+        "text": "Jules bid $141,000 on resale lot 5."
+      },
+      {
+        "id": "event-253",
+        "round": 6,
+        "text": "Remy bid $146,000 on resale lot 5."
+      },
+      {
+        "id": "event-254",
+        "round": 6,
+        "text": "Jules bid $151,000 on resale lot 5."
+      },
+      {
+        "id": "event-255",
+        "round": 6,
+        "text": "Remy bid $156,000 on resale lot 5."
+      },
+      {
+        "id": "event-256",
+        "round": 6,
+        "text": "Jules bid $161,000 on resale lot 5."
+      },
+      {
+        "id": "event-257",
+        "round": 6,
+        "text": "Remy bid $166,000 on resale lot 5."
+      },
+      {
+        "id": "event-258",
+        "round": 6,
+        "text": "Jules bid $167,000 on resale lot 5."
+      },
+      {
+        "id": "event-259",
+        "round": 6,
+        "text": "Remy bid $172,000 on resale lot 5."
+      },
+      {
+        "id": "event-260",
+        "round": 6,
+        "text": "Jules passed on resale lot 5."
+      },
+      {
+        "id": "event-261",
+        "round": 6,
+        "text": "Lot 5 did not sell. Its owner keeps the item."
+      },
+      {
+        "id": "event-262",
+        "round": 6,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-263",
+        "round": 6,
+        "text": "Bidding is open for lot 6."
+      },
+      {
+        "id": "event-264",
+        "round": 6,
+        "text": "Player 1 passed on lot 6."
+      },
+      {
+        "id": "event-265",
+        "round": 6,
+        "text": "Clara bid $1,000 on lot 6."
+      },
+      {
+        "id": "event-266",
+        "round": 6,
+        "text": "Jules bid $6,000 on lot 6."
+      },
+      {
+        "id": "event-267",
+        "round": 6,
+        "text": "Remy bid $11,000 on lot 6."
+      },
+      {
+        "id": "event-268",
+        "round": 6,
+        "text": "Clara bid $16,000 on lot 6."
+      },
+      {
+        "id": "event-269",
+        "round": 6,
+        "text": "Jules bid $21,000 on lot 6."
+      },
+      {
+        "id": "event-270",
+        "round": 6,
+        "text": "Remy bid $26,000 on lot 6."
+      },
+      {
+        "id": "event-271",
+        "round": 6,
+        "text": "Clara bid $31,000 on lot 6."
+      },
+      {
+        "id": "event-272",
+        "round": 6,
+        "text": "Jules bid $36,000 on lot 6."
+      },
+      {
+        "id": "event-273",
+        "round": 6,
+        "text": "Remy bid $41,000 on lot 6."
+      },
+      {
+        "id": "event-274",
+        "round": 6,
+        "text": "Clara bid $46,000 on lot 6."
+      },
+      {
+        "id": "event-275",
+        "round": 6,
+        "text": "Jules bid $51,000 on lot 6."
+      },
+      {
+        "id": "event-276",
+        "round": 6,
+        "text": "Remy bid $56,000 on lot 6."
+      },
+      {
+        "id": "event-277",
+        "round": 6,
+        "text": "Clara bid $61,000 on lot 6."
+      },
+      {
+        "id": "event-278",
+        "round": 6,
+        "text": "Jules bid $66,000 on lot 6."
+      },
+      {
+        "id": "event-279",
+        "round": 6,
+        "text": "Remy bid $71,000 on lot 6."
+      },
+      {
+        "id": "event-280",
+        "round": 6,
+        "text": "Clara bid $76,000 on lot 6."
+      },
+      {
+        "id": "event-281",
+        "round": 6,
+        "text": "Jules bid $81,000 on lot 6."
+      },
+      {
+        "id": "event-282",
+        "round": 6,
+        "text": "Remy bid $86,000 on lot 6."
+      },
+      {
+        "id": "event-283",
+        "round": 6,
+        "text": "Clara bid $91,000 on lot 6."
+      },
+      {
+        "id": "event-284",
+        "round": 6,
+        "text": "Jules bid $96,000 on lot 6."
+      },
+      {
+        "id": "event-285",
+        "round": 6,
+        "text": "Remy bid $101,000 on lot 6."
+      },
+      {
+        "id": "event-286",
+        "round": 6,
+        "text": "Clara passed on lot 6."
+      },
+      {
+        "id": "event-287",
+        "round": 6,
+        "text": "Jules bid $106,000 on lot 6."
+      },
+      {
+        "id": "event-288",
+        "round": 6,
+        "text": "Remy bid $111,000 on lot 6."
+      },
+      {
+        "id": "event-289",
+        "round": 6,
+        "text": "Jules bid $116,000 on lot 6."
+      },
+      {
+        "id": "event-290",
+        "round": 6,
+        "text": "Remy bid $121,000 on lot 6."
+      },
+      {
+        "id": "event-291",
+        "round": 6,
+        "text": "Jules bid $126,000 on lot 6."
+      },
+      {
+        "id": "event-292",
+        "round": 6,
+        "text": "Remy bid $131,000 on lot 6."
+      },
+      {
+        "id": "event-293",
+        "round": 6,
+        "text": "Jules passed on lot 6."
+      },
+      {
+        "id": "event-294",
+        "round": 6,
+        "text": "Remy won lot 6 for $131,000."
+      },
+      {
+        "id": "event-295",
+        "round": 6,
+        "text": "Clara passed the appraisal window."
+      },
+      {
+        "id": "event-296",
+        "round": 6,
+        "text": "Jules passed the appraisal window."
+      },
+      {
+        "id": "event-297",
+        "round": 6,
+        "text": "Remy purchased a full appraisal of lot 6 for $25,000."
+      },
+      {
+        "id": "event-298",
+        "round": 6,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-299",
+        "round": 7,
+        "text": "Lot 7 is now on the block."
+      },
+      {
+        "id": "event-300",
+        "round": 7,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-301",
+        "round": 7,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-302",
+        "round": 7,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-303",
+        "round": 7,
+        "text": "Player 1 chose to hold."
+      },
+      {
+        "id": "event-304",
+        "round": 7,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-305",
+        "round": 7,
+        "text": "Bidding is open for lot 7."
+      },
+      {
+        "id": "event-306",
+        "round": 7,
+        "text": "Player 1 bid $1,000 on lot 7."
+      },
+      {
+        "id": "event-307",
+        "round": 7,
+        "text": "Clara bid $6,000 on lot 7."
+      },
+      {
+        "id": "event-308",
+        "round": 7,
+        "text": "Jules bid $11,000 on lot 7."
+      },
+      {
+        "id": "event-309",
+        "round": 7,
+        "text": "Remy bid $16,000 on lot 7."
+      },
+      {
+        "id": "event-310",
+        "round": 7,
+        "text": "Player 1 bid $17,000 on lot 7."
+      },
+      {
+        "id": "event-311",
+        "round": 7,
+        "text": "Clara bid $22,000 on lot 7."
+      },
+      {
+        "id": "event-312",
+        "round": 7,
+        "text": "Jules bid $27,000 on lot 7."
+      },
+      {
+        "id": "event-313",
+        "round": 7,
+        "text": "Remy bid $32,000 on lot 7."
+      },
+      {
+        "id": "event-314",
+        "round": 7,
+        "text": "Player 1 bid $33,000 on lot 7."
+      },
+      {
+        "id": "event-315",
+        "round": 7,
+        "text": "Clara bid $38,000 on lot 7."
+      },
+      {
+        "id": "event-316",
+        "round": 7,
+        "text": "Jules bid $43,000 on lot 7."
+      },
+      {
+        "id": "event-317",
+        "round": 7,
+        "text": "Remy bid $48,000 on lot 7."
+      },
+      {
+        "id": "event-318",
+        "round": 7,
+        "text": "Player 1 passed on lot 7."
+      },
+      {
+        "id": "event-319",
+        "round": 7,
+        "text": "Clara bid $53,000 on lot 7."
+      },
+      {
+        "id": "event-320",
+        "round": 7,
+        "text": "Jules bid $58,000 on lot 7."
+      },
+      {
+        "id": "event-321",
+        "round": 7,
+        "text": "Remy bid $63,000 on lot 7."
+      },
+      {
+        "id": "event-322",
+        "round": 7,
+        "text": "Clara bid $68,000 on lot 7."
+      },
+      {
+        "id": "event-323",
+        "round": 7,
+        "text": "Jules bid $73,000 on lot 7."
+      },
+      {
+        "id": "event-324",
+        "round": 7,
+        "text": "Remy bid $78,000 on lot 7."
+      },
+      {
+        "id": "event-325",
+        "round": 7,
+        "text": "Clara bid $83,000 on lot 7."
+      },
+      {
+        "id": "event-326",
+        "round": 7,
+        "text": "Jules bid $88,000 on lot 7."
+      },
+      {
+        "id": "event-327",
+        "round": 7,
+        "text": "Remy passed on lot 7."
+      },
+      {
+        "id": "event-328",
+        "round": 7,
+        "text": "Clara bid $93,000 on lot 7."
+      },
+      {
+        "id": "event-329",
+        "round": 7,
+        "text": "Jules bid $98,000 on lot 7."
+      },
+      {
+        "id": "event-330",
+        "round": 7,
+        "text": "Clara bid $103,000 on lot 7."
+      },
+      {
+        "id": "event-331",
+        "round": 7,
+        "text": "Jules bid $108,000 on lot 7."
+      },
+      {
+        "id": "event-332",
+        "round": 7,
+        "text": "Clara bid $113,000 on lot 7."
+      },
+      {
+        "id": "event-333",
+        "round": 7,
+        "text": "Jules bid $118,000 on lot 7."
+      },
+      {
+        "id": "event-334",
+        "round": 7,
+        "text": "Clara bid $123,000 on lot 7."
+      },
+      {
+        "id": "event-335",
+        "round": 7,
+        "text": "Jules bid $128,000 on lot 7."
+      },
+      {
+        "id": "event-336",
+        "round": 7,
+        "text": "Clara bid $133,000 on lot 7."
+      },
+      {
+        "id": "event-337",
+        "round": 7,
+        "text": "Jules bid $138,000 on lot 7."
+      },
+      {
+        "id": "event-338",
+        "round": 7,
+        "text": "Clara bid $143,000 on lot 7."
+      },
+      {
+        "id": "event-339",
+        "round": 7,
+        "text": "Jules bid $148,000 on lot 7."
+      },
+      {
+        "id": "event-340",
+        "round": 7,
+        "text": "Clara bid $153,000 on lot 7."
+      },
+      {
+        "id": "event-341",
+        "round": 7,
+        "text": "Jules bid $158,000 on lot 7."
+      },
+      {
+        "id": "event-342",
+        "round": 7,
+        "text": "Clara bid $163,000 on lot 7."
+      },
+      {
+        "id": "event-343",
+        "round": 7,
+        "text": "Jules bid $168,000 on lot 7."
+      },
+      {
+        "id": "event-344",
+        "round": 7,
+        "text": "Clara bid $169,000 on lot 7."
+      },
+      {
+        "id": "event-345",
+        "round": 7,
+        "text": "Jules bid $174,000 on lot 7."
+      },
+      {
+        "id": "event-346",
+        "round": 7,
+        "text": "Clara passed on lot 7."
+      },
+      {
+        "id": "event-347",
+        "round": 7,
+        "text": "Jules won lot 7 for $174,000."
+      },
+      {
+        "id": "event-348",
+        "round": 7,
+        "text": "Clara passed the appraisal window."
+      },
+      {
+        "id": "event-349",
+        "round": 7,
+        "text": "Jules purchased a full appraisal of lot 7 for $25,000."
+      },
+      {
+        "id": "event-350",
+        "round": 7,
+        "text": "Remy passed the appraisal window."
+      },
+      {
+        "id": "event-351",
+        "round": 7,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-352",
+        "round": 8,
+        "text": "Lot 8 is now on the block."
+      },
+      {
+        "id": "event-353",
+        "round": 8,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-354",
+        "round": 8,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-355",
+        "round": 8,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-356",
+        "round": 8,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-357",
+        "round": 8,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-358",
+        "round": 8,
+        "text": "Bidding is open for lot 8."
+      },
+      {
+        "id": "event-359",
+        "round": 8,
+        "text": "Player 1 passed on lot 8."
+      },
+      {
+        "id": "event-360",
+        "round": 8,
+        "text": "Clara bid $1,000 on lot 8."
+      },
+      {
+        "id": "event-361",
+        "round": 8,
+        "text": "Jules bid $6,000 on lot 8."
+      },
+      {
+        "id": "event-362",
+        "round": 8,
+        "text": "Remy bid $11,000 on lot 8."
+      },
+      {
+        "id": "event-363",
+        "round": 8,
+        "text": "Clara bid $16,000 on lot 8."
+      },
+      {
+        "id": "event-364",
+        "round": 8,
+        "text": "Jules passed on lot 8."
+      },
+      {
+        "id": "event-365",
+        "round": 8,
+        "text": "Remy bid $21,000 on lot 8."
+      },
+      {
+        "id": "event-366",
+        "round": 8,
+        "text": "Clara bid $26,000 on lot 8."
+      },
+      {
+        "id": "event-367",
+        "round": 8,
+        "text": "Remy bid $31,000 on lot 8."
+      },
+      {
+        "id": "event-368",
+        "round": 8,
+        "text": "Clara bid $36,000 on lot 8."
+      },
+      {
+        "id": "event-369",
+        "round": 8,
+        "text": "Remy bid $41,000 on lot 8."
+      },
+      {
+        "id": "event-370",
+        "round": 8,
+        "text": "Clara bid $46,000 on lot 8."
+      },
+      {
+        "id": "event-371",
+        "round": 8,
+        "text": "Remy bid $51,000 on lot 8."
+      },
+      {
+        "id": "event-372",
+        "round": 8,
+        "text": "Clara bid $56,000 on lot 8."
+      },
+      {
+        "id": "event-373",
+        "round": 8,
+        "text": "Remy bid $61,000 on lot 8."
+      },
+      {
+        "id": "event-374",
+        "round": 8,
+        "text": "Clara bid $66,000 on lot 8."
+      },
+      {
+        "id": "event-375",
+        "round": 8,
+        "text": "Remy bid $71,000 on lot 8."
+      },
+      {
+        "id": "event-376",
+        "round": 8,
+        "text": "Clara bid $76,000 on lot 8."
+      },
+      {
+        "id": "event-377",
+        "round": 8,
+        "text": "Remy bid $81,000 on lot 8."
+      },
+      {
+        "id": "event-378",
+        "round": 8,
+        "text": "Clara bid $86,000 on lot 8."
+      },
+      {
+        "id": "event-379",
+        "round": 8,
+        "text": "Remy passed on lot 8."
+      },
+      {
+        "id": "event-380",
+        "round": 8,
+        "text": "Clara won lot 8 for $86,000."
+      },
+      {
+        "id": "event-381",
+        "round": 8,
+        "text": "Clara purchased a full appraisal of lot 8 for $25,000."
+      },
+      {
+        "id": "event-382",
+        "round": 8,
+        "text": "Jules passed the appraisal window."
+      },
+      {
+        "id": "event-383",
+        "round": 8,
+        "text": "Remy passed the appraisal window."
+      },
+      {
+        "id": "event-384",
+        "round": 8,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-385",
+        "round": 9,
+        "text": "Lot 9 is now on the block."
+      },
+      {
+        "id": "event-386",
+        "round": 9,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-387",
+        "round": 9,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-388",
+        "round": 9,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-389",
+        "round": 9,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-390",
+        "round": 9,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-391",
+        "round": 9,
+        "text": "Bidding is open for lot 9."
+      },
+      {
+        "id": "event-392",
+        "round": 9,
+        "text": "Player 1 passed on lot 9."
+      },
+      {
+        "id": "event-393",
+        "round": 9,
+        "text": "Clara bid $1,000 on lot 9."
+      },
+      {
+        "id": "event-394",
+        "round": 9,
+        "text": "Jules bid $6,000 on lot 9."
+      },
+      {
+        "id": "event-395",
+        "round": 9,
+        "text": "Remy bid $11,000 on lot 9."
+      },
+      {
+        "id": "event-396",
+        "round": 9,
+        "text": "Clara bid $16,000 on lot 9."
+      },
+      {
+        "id": "event-397",
+        "round": 9,
+        "text": "Jules passed on lot 9."
+      },
+      {
+        "id": "event-398",
+        "round": 9,
+        "text": "Remy bid $21,000 on lot 9."
+      },
+      {
+        "id": "event-399",
+        "round": 9,
+        "text": "Clara bid $26,000 on lot 9."
+      },
+      {
+        "id": "event-400",
+        "round": 9,
+        "text": "Remy bid $31,000 on lot 9."
+      },
+      {
+        "id": "event-401",
+        "round": 9,
+        "text": "Clara bid $36,000 on lot 9."
+      },
+      {
+        "id": "event-402",
+        "round": 9,
+        "text": "Remy bid $41,000 on lot 9."
+      },
+      {
+        "id": "event-403",
+        "round": 9,
+        "text": "Clara bid $46,000 on lot 9."
+      },
+      {
+        "id": "event-404",
+        "round": 9,
+        "text": "Remy bid $51,000 on lot 9."
+      },
+      {
+        "id": "event-405",
+        "round": 9,
+        "text": "Clara bid $56,000 on lot 9."
+      },
+      {
+        "id": "event-406",
+        "round": 9,
+        "text": "Remy bid $61,000 on lot 9."
+      },
+      {
+        "id": "event-407",
+        "round": 9,
+        "text": "Clara bid $66,000 on lot 9."
+      },
+      {
+        "id": "event-408",
+        "round": 9,
+        "text": "Remy bid $71,000 on lot 9."
+      },
+      {
+        "id": "event-409",
+        "round": 9,
+        "text": "Clara bid $76,000 on lot 9."
+      },
+      {
+        "id": "event-410",
+        "round": 9,
+        "text": "Remy bid $81,000 on lot 9."
+      },
+      {
+        "id": "event-411",
+        "round": 9,
+        "text": "Clara bid $86,000 on lot 9."
+      },
+      {
+        "id": "event-412",
+        "round": 9,
+        "text": "Remy passed on lot 9."
+      },
+      {
+        "id": "event-413",
+        "round": 9,
+        "text": "Clara won lot 9 for $86,000."
+      },
+      {
+        "id": "event-414",
+        "round": 9,
+        "text": "Clara purchased a full appraisal of lot 9 for $25,000."
+      },
+      {
+        "id": "event-415",
+        "round": 9,
+        "text": "Jules passed the appraisal window."
+      },
+      {
+        "id": "event-416",
+        "round": 9,
+        "text": "Remy passed the appraisal window."
+      },
+      {
+        "id": "event-417",
+        "round": 9,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-418",
+        "round": 10,
+        "text": "Lot 10 is now on the block."
+      },
+      {
+        "id": "event-419",
+        "round": 10,
+        "text": "Clara bought a private clue for $5,000."
+      },
+      {
+        "id": "event-420",
+        "round": 10,
+        "text": "Jules bought a private clue for $5,000."
+      },
+      {
+        "id": "event-421",
+        "round": 10,
+        "text": "Remy bought a private clue for $5,000."
+      },
+      {
+        "id": "event-422",
+        "round": 10,
+        "text": "Player 1 bought a private clue for $5,000."
+      },
+      {
+        "id": "event-423",
+        "round": 10,
+        "text": "Negotiation is open."
+      },
+      {
+        "id": "event-424",
+        "round": 10,
+        "text": "Bidding is open for lot 10."
+      },
+      {
+        "id": "event-425",
+        "round": 10,
+        "text": "Player 1 passed on lot 10."
+      },
+      {
+        "id": "event-426",
+        "round": 10,
+        "text": "Clara bid $1,000 on lot 10."
+      },
+      {
+        "id": "event-427",
+        "round": 10,
+        "text": "Jules bid $6,000 on lot 10."
+      },
+      {
+        "id": "event-428",
+        "round": 10,
+        "text": "Remy bid $11,000 on lot 10."
+      },
+      {
+        "id": "event-429",
+        "round": 10,
+        "text": "Clara bid $15,000 on lot 10."
+      },
+      {
+        "id": "event-430",
+        "round": 10,
+        "text": "Jules passed on lot 10."
+      },
+      {
+        "id": "event-431",
+        "round": 10,
+        "text": "Remy bid $20,000 on lot 10."
+      },
+      {
+        "id": "event-432",
+        "round": 10,
+        "text": "Clara passed on lot 10."
+      },
+      {
+        "id": "event-433",
+        "round": 10,
+        "text": "Remy won lot 10 for $20,000."
+      },
+      {
+        "id": "event-434",
+        "round": 10,
+        "text": "Clara passed the appraisal window."
+      },
+      {
+        "id": "event-435",
+        "round": 10,
+        "text": "Jules passed the appraisal window."
+      },
+      {
+        "id": "event-436",
+        "round": 10,
+        "text": "Remy purchased a full appraisal of lot 10 for $25,000."
+      },
+      {
+        "id": "event-437",
+        "round": 10,
+        "text": "Player 1 passed the appraisal window."
+      },
+      {
+        "id": "event-438",
+        "round": 10,
+        "text": "Player 1 paid $0 in final appraisal fees."
+      },
+      {
+        "id": "event-439",
+        "round": 10,
+        "text": "Clara paid $0 in final appraisal fees."
+      },
+      {
+        "id": "event-440",
+        "round": 10,
+        "text": "Jules paid $0 in final appraisal fees."
+      },
+      {
+        "id": "event-441",
+        "round": 10,
+        "text": "Remy paid $0 in final appraisal fees."
+      },
+      {
+        "id": "event-442",
+        "round": 10,
+        "text": "All mysteries are revealed. Final settlement is complete."
+      }
+    ],
+    "scores": [
+      {
+        "playerId": "player-3",
+        "cash": 35000,
+        "itemValue": 560000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 595000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": []
+      },
+      {
+        "playerId": "player-2",
+        "cash": 43000,
+        "itemValue": 540000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 583000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": []
+      },
+      {
+        "playerId": "player-1",
+        "cash": 30000,
+        "itemValue": 505000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 535000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": []
+      },
+      {
+        "playerId": "player-4",
+        "cash": 65000,
+        "itemValue": 380000,
+        "auctionDebt": 0,
+        "leverageDebt": 0,
+        "netWorth": 445000,
+        "appraisalFees": 0,
+        "newDebt": 0,
+        "forfeitedItemIds": []
+      }
+    ]
+  }
+}
