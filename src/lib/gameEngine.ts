@@ -2,7 +2,7 @@ import { ITEM_TEMPLATES } from "../data/items";
 import { SLOT_RESULTS } from "../data/slotResults";
 import { GAME_CONFIG, type GameConfig } from "./config";
 import { pick, shuffle, type Random } from "./randomizer";
-import { calculateItemValue, calculateNetWorth, endgameAppraisalCost, money, withPenalty } from "./valuation";
+import { calculateItemValue, calculateNetWorth, inspectionCost, missingClueSlots, money, withPenalty } from "./valuation";
 import { configSchema, SLOTS, type GameItem, type GameState, type Player, type Slot } from "../types/game";
 
 export type Command =
@@ -15,8 +15,8 @@ export type Command =
   | { type: "START_AUCTION" }
   | { type: "RECORD_AUCTION"; playerId: string; bid: number }
   | { type: "PASS_AUCTION" }
-  | { type: "APPRAISE"; playerId: string; itemId: string; scope: Slot | "full" }
-  | { type: "PASS_APPRAISAL"; playerId: string }
+  | { type: "INSPECT"; playerId: string; itemId: string }
+  | { type: "PASS_INSPECTION"; playerId: string }
   | { type: "REPAY"; playerId: string; amount: number; loanId?: string }
   | { type: "TRADE"; sellerId: string; buyerId: string; itemId: string; price: number }
   | { type: "TRANSFER_CASH"; sellerId: string; buyerId: string; amount: number }
@@ -49,7 +49,6 @@ function note(game: GameState, text: string) {
 function knowledgeFor(player: Player, item: GameItem) {
   return player.knowledge[item.id] ??= {
     clues: { Authenticity: [], Condition: [], History: [], Discovery: [] },
-    appraisedSlots: [],
   };
 }
 
@@ -82,7 +81,24 @@ function chargeWithDebt(game: GameState, player: Player, cost: number) {
 function transferItem(item: GameItem, buyer: Player, price: number) {
   item.ownerId = buyer.id;
   item.purchasePrice = price;
-  item.ownerAppraisedSlots = [];
+}
+
+/** Chance the auction house closes after this round. The maximum round always ends the game. */
+export function endChanceAfter(config: GameConfig, round: number): number {
+  if (round >= config.rounds) return 1;
+  if (round < config.guaranteedRounds) return 0;
+  return Math.min(1, config.endChanceStep * (round - config.guaranteedRounds + 1));
+}
+
+/** Expected number of rounds still to be played, counting the current one. */
+export function expectedRoundsLeft(config: GameConfig, round: number): number {
+  let expected = 0;
+  let reached = 1;
+  for (let next = round; next <= config.rounds && reached > 0; next++) {
+    expected += reached;
+    reached *= 1 - endChanceAfter(config, next);
+  }
+  return expected;
 }
 
 export function currentItem(game: GameState) {
@@ -113,13 +129,14 @@ export function generateGame(names: string[], config: GameConfig = GAME_CONFIG, 
       ])) as GameItem["hidden"];
       const lot = items.length + 1;
       items.push({ ...template, id: `lot-${lot}`, templateId: template.id, lot, hidden,
-        ownerId: null, purchasePrice: null, ownerAppraisedSlots: [], forfeited: false });
+        ownerId: null, purchasePrice: null, forfeited: false });
     }
   }
   const game: GameState = {
-    version: 1, mode, id: crypto.randomUUID(), config: rules, round: 1, phase: "actions",
+    version: 2, mode, id: crypto.randomUUID(), config: rules, round: 1, phase: "actions",
     players: cleanNames.map((name, index) => ({ id: `player-${index + 1}`, name, cash: rules.startingCash, auctionDebt: 0, knowledge: {} })),
-    items, actions: {}, appraisalDone: [], loans: [], consignment: null, bidding: null, log: [], scores: [],
+    items, actions: {}, inspectionDone: [], loans: [], consignment: null, bidding: null, log: [],
+    negotiation: { offers: [], proposals: {} }, chat: [], scores: [],
   };
   note(game, `The auction house is open. Four collectors, ${rules.rounds} mysteries.`);
   return game;
@@ -144,31 +161,33 @@ function recordAuctionResult(game: GameState, playerId: string, bid: number) {
   requireRule(!item.ownerId, "This lot has already been sold.");
   const debt = chargeWithDebt(game, player, bid);
   transferItem(item, player, bid);
-  game.phase = "appraisal";
-  game.bidding = null;
-  game.appraisalDone = game.players.filter(player => !ownedItems(game, player.id).length).map(player => player.id);
+  openInspectionWindow(game);
   note(game, `${player.name} won lot ${item.lot} for ${money(bid)}.${debt ? ` New auction debt: ${money(debt)}.` : ""}`);
 }
 
-function appraise(game: GameState, playerId: string, itemId: string, scope: Slot | "full") {
-  requirePhase(game, "appraisal");
+function openInspectionWindow(game: GameState) {
+  game.phase = "inspection";
+  game.bidding = null;
+  game.inspectionDone = game.players.filter(player => !ownedItems(game, player.id).length).map(player => player.id);
+}
+
+/** Reveals one clue in each category this player has not investigated yet.
+ * Clues already bought or remembered are never charged again. */
+function inspect(game: GameState, playerId: string, itemId: string, random: Random) {
+  requirePhase(game, "inspection");
   const player = playerIn(game, playerId);
   const item = itemIn(game, itemId);
-  requireRule(item.ownerId === playerId, "You can only appraise your own items.");
-  requireRule(!game.appraisalDone.includes(playerId), "You have already used or passed this appraisal window.");
-  requireRule(player.auctionDebt === 0, "Repay auction debt before purchasing an appraisal.");
-  requireRule(scope === "full" || SLOTS.includes(scope), "Choose a valid appraisal category.");
-  const slots = scope === "full" ? [...SLOTS] : [scope];
-  requireRule(slots.some(slot => !item.ownerAppraisedSlots.includes(slot)), "That information is already appraised for this ownership period.");
-  const cost = scope === "full" ? game.config.fullAppraisalCost : game.config.partialAppraisalCost;
+  requireRule(item.ownerId === playerId, "You can only inspect your own items.");
+  requireRule(!game.inspectionDone.includes(playerId), "You have already used or passed this inspection window.");
+  requireRule(player.auctionDebt === 0, "Repay auction debt before purchasing an inspection.");
+  const missing = missingClueSlots(player, item);
+  requireRule(missing.length, "You already have a clue in every category for this item.");
+  const cost = inspectionCost(game, player, item);
   spendCash(player, cost);
   const knowledge = knowledgeFor(player, item);
-  for (const slot of slots) {
-    if (!knowledge.appraisedSlots.includes(slot)) knowledge.appraisedSlots.push(slot);
-    if (!item.ownerAppraisedSlots.includes(slot)) item.ownerAppraisedSlots.push(slot);
-  }
-  game.appraisalDone.push(playerId);
-  note(game, `${player.name} purchased a ${scope === "full" ? "full" : "partial"} appraisal of lot ${item.lot} for ${money(cost)}.`);
+  for (const slot of missing) knowledge.clues[slot].push(pick(item.hidden[slot].clues, random));
+  game.inspectionDone.push(playerId);
+  note(game, `${player.name} purchased a full inspection of lot ${item.lot} for ${money(cost)}.`);
 }
 
 function consignItem(game: GameState, playerId: string, itemId: string, reserve: number) {
@@ -231,7 +250,7 @@ function repayDebt(game: GameState, playerId: string, payment: number, loanId?: 
 
 function finishGame(game: GameState) {
   const forfeitures: Record<string, string[]> = Object.fromEntries(game.players.map(player => [player.id, []]));
-  // Collateral is forfeited before appraisal charges; the secured debt is cleared.
+  // Collateral is forfeited before scoring; the secured debt is cleared.
   for (const loan of game.loans.filter(loan => loan.status === "active")) {
     const item = itemIn(game, loan.itemId);
     item.ownerId = null;
@@ -241,25 +260,14 @@ function finishGame(game: GameState) {
     loan.status = "forfeited";
     note(game, `${playerIn(game, loan.playerId).name} forfeited lot ${item.lot}; its leverage debt was cleared.`);
   }
-  game.scores = game.players.map(player => {
-    let appraisalFees = 0;
-    let newDebt = 0;
-    for (const item of ownedItems(game, player.id)) {
-      const fee = endgameAppraisalCost(game, item);
-      appraisalFees += fee;
-      newDebt += chargeWithDebt(game, player, fee);
-      item.ownerAppraisedSlots = [...SLOTS];
-      knowledgeFor(player, item).appraisedSlots = [...SLOTS];
-    }
-    note(game, `${player.name} paid ${money(appraisalFees)} in final appraisal fees.${newDebt ? ` New debt including penalty: ${money(newDebt)}.` : ""}`);
-    return {
-      playerId: player.id, cash: player.cash,
-      itemValue: ownedItems(game, player.id).reduce((sum, item) => sum + calculateItemValue(item), 0),
-      auctionDebt: player.auctionDebt, leverageDebt: 0,
-      netWorth: calculateNetWorth(game, player), appraisalFees, newDebt,
-      forfeitedItemIds: forfeitures[player.id],
-    };
-  }).sort((a, b) => b.netWorth - a.netWorth);
+  // Every retained item is revealed at no cost.
+  game.scores = game.players.map(player => ({
+    playerId: player.id, cash: player.cash,
+    itemValue: ownedItems(game, player.id).reduce((sum, item) => sum + calculateItemValue(item), 0),
+    auctionDebt: player.auctionDebt, leverageDebt: 0,
+    netWorth: calculateNetWorth(game, player),
+    forfeitedItemIds: forfeitures[player.id],
+  })).sort((a, b) => b.netWorth - a.netWorth);
   game.phase = "finished";
   note(game, "All mysteries are revealed. Final settlement is complete.");
 }
@@ -308,18 +316,16 @@ export function executeCommand(state: GameState, command: Command, random: Rando
     case "PASS_AUCTION":
       requirePhase(game, "auction");
       requireRule(game.mode === "solo", "Only a solo auction can close without a bid.");
-      game.phase = "appraisal";
-      game.bidding = null;
-      game.appraisalDone = game.players.filter(player => !ownedItems(game, player.id).length).map(player => player.id);
+      openInspectionWindow(game);
       note(game, `No bids for lot ${currentItem(game).lot}. The lot remains unsold.`);
       break;
-    case "APPRAISE": appraise(game, command.playerId, command.itemId, command.scope); break;
-    case "PASS_APPRAISAL": {
-      requirePhase(game, "appraisal");
+    case "INSPECT": inspect(game, command.playerId, command.itemId, random); break;
+    case "PASS_INSPECTION": {
+      requirePhase(game, "inspection");
       const player = playerIn(game, command.playerId);
-      requireRule(!game.appraisalDone.includes(player.id), "This player has already finished their appraisal window.");
-      game.appraisalDone.push(player.id);
-      note(game, `${player.name} passed the appraisal window.`);
+      requireRule(!game.inspectionDone.includes(player.id), "This player has already finished their inspection window.");
+      game.inspectionDone.push(player.id);
+      note(game, `${player.name} passed the inspection window.`);
       break;
     }
     case "REPAY": repayDebt(game, command.playerId, command.amount, command.loanId); break;
@@ -339,14 +345,18 @@ export function executeCommand(state: GameState, command: Command, random: Rando
       break;
     }
     case "ADVANCE":
-      requirePhase(game, "appraisal");
-      requireRule(game.players.every(player => game.appraisalDone.includes(player.id)), "Finish each player’s appraisal decision first.");
-      if (game.round === game.config.rounds) finishGame(game);
-      else {
+      requirePhase(game, "inspection");
+      requireRule(game.players.every(player => game.inspectionDone.includes(player.id)), "Finish each player’s inspection decision first.");
+      const chance = endChanceAfter(game.config, game.round);
+      if (chance >= 1 || (chance > 0 && random() < chance)) {
+        if (game.round < game.config.rounds) note(game, `The auction house closes after round ${game.round} (${Math.round(chance * 100)}% chance).`);
+        finishGame(game);
+      } else {
+        if (chance > 0) note(game, `The auction house stays open (${Math.round(chance * 100)}% chance it would close).`);
         game.round++;
         game.phase = "actions";
         game.actions = {};
-        game.appraisalDone = [];
+        game.inspectionDone = [];
         note(game, `Lot ${game.round} is now on the block.`);
       }
       break;

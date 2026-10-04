@@ -1,10 +1,11 @@
 import { BID_INCREMENT, botNextBid, isBot } from "./bots";
-import { currentItem, executeCommand, ownedItems, type Command } from "./gameEngine";
-import { endgameAppraisalCost, money } from "./valuation";
+import { executeDealCommand, makeOpeningOffers, type DealCommand } from "./botDeals";
+import { currentItem, executeCommand, type Command } from "./gameEngine";
+import { money } from "./valuation";
 import type { Random } from "./randomizer";
 import { SLOTS, type GameState } from "../types/game";
 
-export type PlayCommand = Command
+export type PlayCommand = Command | DealCommand
   | { type: "PLACE_BID"; amount: number }
   | { type: "PASS_BID" }
   | { type: "BOT_BID_TURN" };
@@ -72,30 +73,20 @@ export function runBotTurns(state: GameState, random: Random = Math.random): Gam
   if (game.consignment || game.phase === "auction") return openBidding(game);
   for (let index = 1; index < game.players.length; index++) {
     let player = game.players[index];
-    if (game.phase !== "actions" && game.phase !== "appraisal") continue;
+    if (game.phase !== "actions" && game.phase !== "inspection") continue;
     if (player.auctionDebt > 0 && player.cash > 0) {
       game = executeCommand(game, { type: "REPAY", playerId: player.id, amount: Math.min(player.cash, player.auctionDebt) }, random);
       player = game.players[index];
     }
     if (game.phase === "actions" && !game.actions[player.id]) {
-      const canResearch = !player.auctionDebt && player.cash >= game.config.clueCost + game.config.fullAppraisalCost + BID_INCREMENT;
+      const canResearch = !player.auctionDebt && player.cash >= game.config.clueCost + BID_INCREMENT;
       game = executeCommand(game, canResearch
         ? { type: "BUY_CLUE", playerId: player.id, slot: SLOTS[(game.round + index - 2) % SLOTS.length] }
         : { type: "HOLD", playerId: player.id }, random);
     }
-    if (game.phase === "appraisal" && !game.appraisalDone.includes(player.id)) {
-      const item = ownedItems(game, player.id).filter(item => item.ownerAppraisedSlots.length < SLOTS.length)
-        .sort((a, b) => endgameAppraisalCost(game, b) - endgameAppraisalCost(game, a))[0];
-      let command: Command = { type: "PASS_APPRAISAL", playerId: player.id };
-      if (item && !player.auctionDebt) {
-        if (player.cash >= game.config.fullAppraisalCost && game.config.fullAppraisalCost <= endgameAppraisalCost(game, item)) {
-          command = { type: "APPRAISE", playerId: player.id, itemId: item.id, scope: "full" };
-        } else if (!item.ownerAppraisedSlots.length && player.cash >= game.config.partialAppraisalCost &&
-          game.config.partialAppraisalCost + game.config.endgameCompletionCost < game.config.endgameFullAppraisalCost) {
-          command = { type: "APPRAISE", playerId: player.id, itemId: item.id, scope: "Authenticity" };
-        }
-      }
-      game = executeCommand(game, command, random);
+    // Bots never resell, so an inspection would only spend cash they could bid with.
+    if (game.phase === "inspection" && !game.inspectionDone.includes(player.id)) {
+      game = executeCommand(game, { type: "PASS_INSPECTION", playerId: player.id }, random);
     }
   }
   return game;
@@ -115,11 +106,25 @@ export function executePlayCommand(game: GameState, command: PlayCommand, random
     if (botTurn) throw new Error("Wait for the computer opponents to finish their turns.");
     return takeBidTurn(game, command.type === "PLACE_BID" ? command.amount : null, random);
   }
+  if (command.type === "PROPOSE_DEAL" || command.type === "RESPOND_OFFER" || command.type === "SAY") {
+    return executeDealCommand(game, command, random);
+  }
   if (game.mode === "solo") {
     if ("playerId" in command && isBot(game, command.playerId)) throw new Error("Computer opponents take their own turns.");
     if (["RECORD_AUCTION", "PASS_AUCTION", "RESOLVE_CONSIGN", "TRADE", "TRANSFER_CASH"].includes(command.type)) {
       throw new Error("Use the solo bidding controls. Table deals are available in shared-computer mode.");
     }
   }
-  return runBotTurns(executeCommand(game, command, random), random);
+  const next = executeCommand(game, command, random);
+  if (next.mode === "solo" && command.type === "START_NEGOTIATION") {
+    next.negotiation = { offers: makeOpeningOffers(next, random), proposals: {} };
+    for (const offer of next.negotiation.offers) {
+      const bot = next.players.find(player => player.id === offer.botId)!;
+      const lot = next.items.find(item => item.id === offer.itemId)!.lot;
+      next.log.push({ id: `event-${next.log.length + 1}`, round: next.round,
+        text: `${bot.name} offered ${money(offer.price)} ${offer.kind === "bot-buys" ? "to buy" : "to sell"} lot ${lot}.` });
+    }
+  }
+  if (command.type === "START_AUCTION") next.negotiation = { offers: [], proposals: {} };
+  return runBotTurns(next, random);
 }

@@ -1,4 +1,4 @@
-import { SLOTS, type GameItem, type GameState, type Player } from "../types/game";
+import { SLOTS, type GameItem, type GameState, type Player, type Slot } from "../types/game";
 
 // Round fractional penalties up to a dollar, without floating-point extra dollars.
 export function withPenalty(principal: number, rate: number): number {
@@ -15,20 +15,15 @@ export function calculateNetWorth(game: GameState, player: Player): number {
   return player.cash + assets - player.auctionDebt - loans;
 }
 
-/** Account estimates use public base values and this owner's learned modifiers.
- * Unknown results and clues never expose an item's hidden valuation. */
-export function accountItemValue(item: GameItem, player: Player) {
-  const knownSlots = player.knowledge[item.id]?.appraisedSlots ?? [];
-  return {
-    value: Math.max(0, item.baseValue + SLOTS.reduce((sum, slot) =>
-      sum + (knownSlots.includes(slot) ? item.hidden[slot].valueModifier : 0), 0)),
-    estimated: !SLOTS.every(slot => knownSlots.includes(slot)),
-  };
+/** Account estimates use public base values only. Clues never expose an exact modifier,
+ * so true values stay hidden until final settlement. */
+export function accountItemValue(item: GameItem) {
+  return { value: item.baseValue, estimated: true };
 }
 
 export function accountNetWorth(game: GameState, player: Player) {
-  const values = game.items.filter(item => item.ownerId === player.id).map(item => accountItemValue(item, player));
-  const collectionValue = values.reduce((sum, item) => sum + item.value, 0);
+  const owned = game.items.filter(item => item.ownerId === player.id);
+  const collectionValue = owned.reduce((sum, item) => sum + accountItemValue(item).value, 0);
   const leverageDebt = game.loans.filter(loan => loan.playerId === player.id && loan.status === "active")
     .reduce((sum, loan) => sum + loan.remaining, 0);
   return {
@@ -37,14 +32,18 @@ export function accountNetWorth(game: GameState, player: Player) {
     auctionDebt: player.auctionDebt,
     leverageDebt,
     netWorth: player.cash + collectionValue - player.auctionDebt - leverageDebt,
-    estimated: values.some(item => item.estimated),
+    estimated: owned.length > 0,
   };
 }
 
-export function endgameAppraisalCost(game: GameState, item: GameItem): number {
-  const count = new Set(item.ownerAppraisedSlots).size;
-  if (count === SLOTS.length) return 0;
-  return count ? game.config.endgameCompletionCost : game.config.endgameFullAppraisalCost;
+/** Categories this player has no clue for yet, including clues remembered from earlier ownership. */
+export function missingClueSlots(player: Player, item: GameItem): Slot[] {
+  const clues = player.knowledge[item.id]?.clues;
+  return SLOTS.filter(slot => !clues?.[slot].length);
+}
+
+export function inspectionCost(game: GameState, player: Player, item: GameItem): number {
+  return missingClueSlots(player, item).length * game.config.inspectionCost;
 }
 
 export function money(value: number): string {

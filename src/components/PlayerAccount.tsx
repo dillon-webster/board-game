@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { BookOpen, Landmark } from "lucide-react";
 import { activeLoan, ownedItems } from "@/lib/gameEngine";
-import { accountItemValue, accountNetWorth, endgameAppraisalCost, money } from "@/lib/valuation";
+import { accountItemValue, accountNetWorth, missingClueSlots, money } from "@/lib/valuation";
 import type { GameState, Player } from "@/types/game";
 import Modal from "./Modal";
 import { MoneyInput, type Dispatch } from "./GameControls";
@@ -22,7 +22,7 @@ export default function PlayerAccount({ game, player, dispatch, onClose, onNoteb
       <p>Cash + collection value − auction debt − leverage debt</p>
     </section>
     <div className="account-totals"><div><span>Available cash</span><strong>{money(account.cash)}</strong></div><div><span>{account.estimated ? "Estimated collection value" : "Collection value"}</span><strong>{money(account.collectionValue)}</strong></div><div><span>Auction debt</span><strong className={account.auctionDebt ? "debt-text" : ""}>{money(account.auctionDebt)}</strong></div><div><span>Leverage debt</span><strong>{money(account.leverageDebt)}</strong></div></div>
-    <p className="muted small">{account.estimated ? "Unrevealed items use their public base value plus modifiers you’ve appraised. Unknown details may raise or lower your total. " : "All owned item values are known. "}This total is before endgame appraisal fees and collateral forfeitures.</p>
+    <p className="muted small">{account.estimated ? "Items count at their public base value. Their hidden details may raise or lower your total when everything is revealed at final settlement. " : ""}This total does not assume collateral forfeitures.</p>
     {(player.auctionDebt > 0 || loans.length > 0) && <section className="repayment-box">
       <h3><Landmark size={18} /> Repay debt</h3>
       <form onSubmit={event => { event.preventDefault(); if (dispatch({ type: "REPAY", playerId: player.id, amount: Number(payment), ...(debtId === "auction" ? {} : { loanId: debtId }) })) { setPayment(""); setDebtId("auction"); } }}>
@@ -35,12 +35,12 @@ export default function PlayerAccount({ game, player, dispatch, onClose, onNoteb
     {items.length === 0 && <p className="inline-empty">Your collection starts with your first winning bid.</p>}
     {items.map(item => {
       const loan = activeLoan(game, item.id);
-      const valuation = accountItemValue(item, player);
+      const valuation = accountItemValue(item);
       return <div className="owned-item" key={item.id}>
-        <div className="row-between"><strong>Lot {item.lot} · {item.name}</strong><span className="tag">{item.ownerAppraisedSlots.length}/4 appraised</span></div>
+        <div className="row-between"><strong>Lot {item.lot} · {item.name}</strong><span className="tag">{4 - missingClueSlots(player, item).length}/4 clued</span></div>
         <p className="muted small">Base {money(item.baseValue)} · Paid {money(item.purchasePrice ?? 0)}</p>
-        <p className="small">{valuation.estimated ? "Estimated value" : "Known value"}: <strong>{money(valuation.value)}</strong></p>
-        <p className="small">{loan ? `Collateral · ${money(loan.remaining)} owed. Forfeited if unpaid at game end.` : `Endgame appraisal fee: ${money(endgameAppraisalCost(game, item))}`}</p>
+        <p className="small">{valuation.estimated ? "Estimated value" : "Value"}: <strong>{money(valuation.value)}</strong></p>
+        <p className="small">{loan ? `Collateral · ${money(loan.remaining)} owed. Forfeited if unpaid at game end.` : "Not collateral."}</p>
       </div>;
     })}
   </Modal>;

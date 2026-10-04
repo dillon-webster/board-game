@@ -20,11 +20,12 @@ async function holds(page: Page) {
   await page.getByRole("button", { name: "Continue to Negotiation" }).click();
 }
 
-test("complete a ten-round game using visible controls, with private clues, appraisal, and reload", async ({ page }) => {
+test("complete a ten-round game using visible controls, with private clues, inspection, and reload", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
   await page.screenshot({ path: "/tmp/mystery-auction-setup.png", fullPage: true });
+  await page.getByLabel("Guaranteed rounds", { exact: true }).fill("10");
   await page.getByRole("button", { name: "Open the auction house" }).click();
   await page.screenshot({ path: "/tmp/mystery-auction-game.png", fullPage: true });
 
@@ -52,14 +53,15 @@ test("complete a ten-round game using visible controls, with private clues, appr
     await page.getByLabel("Winning bid", { exact: true }).fill("75000");
     await page.getByRole("button", { name: "Record auction result" }).click();
     if (round === 1) {
-      await page.getByRole("button", { name: "Purchase appraisal · $25,000" }).click();
+      // Player 1 already bought the Authenticity clue, so only three categories are charged.
+      await page.getByRole("button", { name: "Purchase inspection · $15,000" }).click();
       await page.getByRole("button", { name: "Reveal my private notes" }).click();
-      await expect(page.getByText("Exact item value", { exact: true })).toBeVisible();
+      await expect(page.locator(".clue-text")).toHaveCount(4);
       game = await state(page);
-      for (const result of Object.values(game.items[0].hidden)) await expect(page.getByText(result.truth, { exact: true })).toBeVisible();
+      for (const result of Object.values(game.items[0].hidden)) await expect(page.getByText(result.truth, { exact: true })).toHaveCount(0);
       await page.getByRole("button", { name: "Hide notes & return to the table" }).click();
     }
-    while ((await page.getByRole("button", { name: "Pass appraisal window" }).count()) > 0) await page.getByRole("button", { name: "Pass appraisal window" }).click();
+    while ((await page.getByRole("button", { name: "Pass inspection window" }).count()) > 0) await page.getByRole("button", { name: "Pass inspection window" }).click();
     if (round < 10) await page.getByRole("button", { name: "Next round", exact: true }).click();
   }
   await page.getByRole("button", { name: "Review final settlement" }).click();
@@ -81,8 +83,8 @@ test("resale, private reserve, borrowing, and debt repayment work through the in
   await page.getByLabel("Winning bid", { exact: true }).fill("510000");
   await expect(page.getByText("New auction debt: $12,000", { exact: false })).toBeVisible();
   await page.getByRole("button", { name: "Record auction result" }).click();
-  await expect(page.getByRole("button", { name: "Purchase appraisal · $25,000" })).toBeDisabled();
-  await page.getByRole("button", { name: "Pass appraisal window" }).click();
+  await expect(page.getByRole("button", { name: "Purchase inspection · $20,000" })).toBeDisabled();
+  await page.getByRole("button", { name: "Pass inspection window" }).click();
   await page.getByRole("button", { name: "Next round", exact: true }).click();
   await page.getByRole("button", { name: "Leverage", exact: true }).click();
   await page.getByLabel("Loan amount", { exact: true }).fill("50000");
@@ -107,7 +109,7 @@ test("resale, private reserve, borrowing, and debt repayment work through the in
   await page.getByLabel("Winning player").selectOption("player-2");
   await page.getByLabel("Winning bid", { exact: true }).fill("1000");
   await page.getByRole("button", { name: "Record auction result" }).click();
-  while ((await page.getByRole("button", { name: "Pass appraisal window" }).count()) > 0) await page.getByRole("button", { name: "Pass appraisal window" }).click();
+  while ((await page.getByRole("button", { name: "Pass inspection window" }).count()) > 0) await page.getByRole("button", { name: "Pass inspection window" }).click();
   await page.getByRole("button", { name: "Next round", exact: true }).click();
   await page.getByRole("button", { name: "Consign", exact: true }).click();
   await page.getByRole("button", { name: "Set a private reserve" }).click();
@@ -118,7 +120,6 @@ test("resale, private reserve, borrowing, and debt repayment work through the in
   await page.getByRole("button", { name: "Record resale", exact: true }).click();
   const game = await state(page);
   expect(game.items[0].ownerId).toBe("player-2");
-  expect(game.items[0].ownerAppraisedSlots).toEqual([]);
   expect(game.loans[0].status).toBe("repaid");
 });
 
@@ -145,18 +146,18 @@ test("malformed saves show a recovery message and allow a fresh game", async ({ 
   await expect(page.locator(".error-banner")).toHaveCount(0);
 });
 
-test("partial appraisal renders exactly one truth and no total valuation", async ({ page }) => {
+test("inspection after a pre-auction clue charges only new categories and reveals no truths", async ({ page }) => {
   let game = generateGame(["One", "Two", "Three", "Four"]);
-  const commands: Command[] = game.players.map(player => ({ type: "HOLD", playerId: player.id }));
+  const commands: Command[] = [{ type: "BUY_CLUE", playerId: "player-1", slot: "Condition" }, ...game.players.slice(1).map(player => ({ type: "HOLD" as const, playerId: player.id }))];
   commands.push({ type: "START_NEGOTIATION" }, { type: "START_AUCTION" }, { type: "RECORD_AUCTION", playerId: "player-1", bid: 100_000 });
   for (const command of commands) game = run(game, command);
   await page.addInitScript(({ key, game }) => localStorage.setItem(key, JSON.stringify(game)), { key: STORAGE_KEY, game });
   await page.goto("/");
-  await page.getByLabel("Appraisal type").selectOption("Condition");
-  await page.getByRole("button", { name: "Purchase appraisal · $10,000" }).click();
+  await expect(page.getByText("3 categories × $5,000", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Purchase inspection · $15,000" }).click();
   await page.getByRole("button", { name: "Reveal my private notes" }).click();
-  await expect(page.getByText(game.items[0].hidden.Condition.truth, { exact: true })).toBeVisible();
-  await expect(page.getByText(game.items[0].hidden.Authenticity.truth, { exact: true })).toHaveCount(0);
-  await expect(page.getByText("Exact item value", { exact: true })).toHaveCount(0);
+  await expect(page.locator(".clue-text")).toHaveCount(4);
+  for (const result of Object.values(game.items[0].hidden)) await expect(page.getByText(result.truth, { exact: true })).toHaveCount(0);
+  expect((await state(page)).players[0].cash).toBe(380_000);
   await page.getByRole("button", { name: "Hide notes & return to the table" }).click();
 });

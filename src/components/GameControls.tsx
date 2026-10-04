@@ -5,9 +5,10 @@ import { ArrowRight, Check, Gavel, HandCoins, LockKeyhole, Search, SkipForward }
 import { activeLoan, currentItem, ownedItems, type Command } from "@/lib/gameEngine";
 import { BID_INCREMENT, isBot } from "@/lib/bots";
 import type { PlayCommand } from "@/lib/botGame";
-import { money, withPenalty } from "@/lib/valuation";
+import { inspectionCost, missingClueSlots, money, withPenalty } from "@/lib/valuation";
 import { SLOTS, type GameState, type Player } from "@/types/game";
 import Modal from "./Modal";
+import SoloNegotiation from "./SoloNegotiation";
 
 export type Dispatch = (command: PlayCommand) => boolean;
 type ControlsProps = { game: GameState; player: Player; dispatch: Dispatch };
@@ -55,7 +56,7 @@ function ActionControls({ game, player, dispatch }: ControlsProps) {
       {player.auctionDebt > 0 ? <p className="inline-warning">Repay auction debt to unlock clues.</p> : player.cash < game.config.clueCost ? <p className="inline-warning">Not enough cash for a clue.</p> : null}
       <button className="button primary full-width" disabled={player.auctionDebt > 0 || player.cash < game.config.clueCost} onClick={() => dispatch({ type: "BUY_CLUE", playerId: player.id, slot })}><Search size={17} /> Buy a Clue · {money(game.config.clueCost)}</button>
     </> : availableItems.length ? <>
-      <label className="field">Choose an owned item<select value={itemId} onChange={event => { setItemId(event.target.value); setCash(""); }}>{availableItems.map(item => <option key={item.id} value={item.id}>Lot {item.lot} · {item.name}</option>)}</select></label>
+      <label className="field">Choose an owned item<select value={itemId} onChange={event => { setItemId(event.target.value); setCash(""); }}>{availableItems.map(item => <option key={item.id} value={item.id}>Lot {item.lot} · {item.name} · paid {money(item.purchasePrice ?? 0)}</option>)}</select></label>
       {action === "consign" ? <>
         <p className="muted small">Offer this item to the other players. You keep it if its private reserve is not met.</p>
         <button className="button primary full-width" onClick={() => setReserveOpen(true)}><LockKeyhole size={17} /> Set a private reserve</button>
@@ -123,23 +124,23 @@ function BotAuctionControls({ game, dispatch }: { game: GameState; dispatch: Dis
   </div>;
 }
 
-function AppraisalControls({ game, player, dispatch }: ControlsProps) {
-  const available = ownedItems(game, player.id).filter(item => item.ownerAppraisedSlots.length < SLOTS.length);
+function InspectionControls({ game, player, dispatch }: ControlsProps) {
+  const available = ownedItems(game, player.id).filter(item => missingClueSlots(player, item).length);
   const [itemId, setItemId] = useState(available[0]?.id ?? "");
-  const [scope, setScope] = useState<(typeof SLOTS)[number] | "full">("full");
   const item = available.find(item => item.id === itemId);
-  const cost = scope === "full" ? game.config.fullAppraisalCost : game.config.partialAppraisalCost;
-  if (game.appraisalDone.includes(player.id)) return <div className="empty-state"><span className="large-icon"><Check /></span><h3>Window complete</h3><p>{player.name} has finished or has no items to appraise. {game.mode === "solo" ? "The bots have finished their appraisals too." : "Select another player to continue."}</p></div>;
+  const missing = item ? missingClueSlots(player, item) : [];
+  const cost = item ? inspectionCost(game, player, item) : 0;
+  if (game.inspectionDone.includes(player.id)) return <div className="empty-state"><span className="large-icon"><Check /></span><h3>Window complete</h3><p>{player.name} has finished or has no items to inspect. {game.mode === "solo" ? "The bots have finished their turns too." : "Select another player to continue."}</p></div>;
   return <div className="control-content">
-    <p className="muted">{player.name} may purchase one appraisal on one owned item this round.</p>
+    <p className="muted">{player.name} may purchase one full inspection on one owned item this round.</p>
     {available.length ? <>
-      <label className="field">Item to appraise<select value={itemId} onChange={event => { setItemId(event.target.value); setScope("full"); }}>{available.map(item => <option key={item.id} value={item.id}>Lot {item.lot} · {item.name}</option>)}</select></label>
-      <label className="field">Appraisal type<select value={scope} onChange={event => setScope(event.target.value as typeof scope)}><option value="full">Full appraisal · {money(game.config.fullAppraisalCost)}</option>{SLOTS.filter(slot => !item?.ownerAppraisedSlots.includes(slot)).map(slot => <option key={slot} value={slot}>{slot} only · {money(game.config.partialAppraisalCost)}</option>)}</select></label>
-      <p className="muted small">{scope === "full" ? "Privately reveals all four truths, modifiers, and the exact item value." : "Privately reveals the truth and exact modifier for this category only."}</p>
-      {player.auctionDebt > 0 ? <p className="inline-warning">Auction debt blocks appraisal. Repay it using Manage funds, or pass this window.</p> : player.cash < cost ? <p className="inline-warning">You need {money(cost)} in cash. Appraisals cannot be financed.</p> : null}
-      <button className="button primary full-width" disabled={player.auctionDebt > 0 || player.cash < cost} onClick={() => dispatch({ type: "APPRAISE", playerId: player.id, itemId, scope })}><Search size={17} /> Purchase appraisal · {money(cost)}</button>
-    </> : <p className="inline-empty">All your owned items are fully appraised.</p>}
-    <button className="button quiet full-width" onClick={() => dispatch({ type: "PASS_APPRAISAL", playerId: player.id })}><SkipForward size={16} /> Pass appraisal window</button>
+      <label className="field">Item to inspect<select value={itemId} onChange={event => setItemId(event.target.value)}>{available.map(item => <option key={item.id} value={item.id}>Lot {item.lot} · {item.name}</option>)}</select></label>
+      <div className="price-line"><span>{missing.length} {missing.length === 1 ? "category" : "categories"} × {money(game.config.inspectionCost)}</span><strong>{money(cost)}</strong></div>
+      <p className="muted small">Privately reveals a clue for {missing.length === 4 ? "all four categories" : missing.join(", ")}. Categories you already have clues for are free.</p>
+      {player.auctionDebt > 0 ? <p className="inline-warning">Auction debt blocks inspection. Repay it using Manage funds, or pass this window.</p> : player.cash < cost ? <p className="inline-warning">You need {money(cost)} in cash. Inspections cannot be financed.</p> : null}
+      <button className="button primary full-width" disabled={player.auctionDebt > 0 || player.cash < cost} onClick={() => dispatch({ type: "INSPECT", playerId: player.id, itemId })}><Search size={17} /> Purchase inspection · {money(cost)}</button>
+    </> : <p className="inline-empty">You already have a clue in every category for each item you own.</p>}
+    <button className="button quiet full-width" onClick={() => dispatch({ type: "PASS_INSPECTION", playerId: player.id })}><SkipForward size={16} /> Pass inspection window</button>
   </div>;
 }
 
@@ -147,11 +148,12 @@ export default function GameControls({ game, player, dispatch, onDeals }: Contro
   if (game.consignment) return game.mode === "solo" ? <BotAuctionControls key={game.bidding?.history.length} game={game} dispatch={dispatch} /> : <ConsignmentResult game={game} dispatch={dispatch} />;
   if (game.phase === "actions") return <ActionControls game={game} player={player} dispatch={dispatch} />;
   if (game.phase === "auction") return game.mode === "solo" ? <BotAuctionControls key={game.bidding?.history.length} game={game} dispatch={dispatch} /> : <AuctionControls game={game} dispatch={dispatch} />;
-  if (game.phase === "appraisal") return <AppraisalControls game={game} player={player} dispatch={dispatch} />;
+  if (game.phase === "inspection") return <InspectionControls game={game} player={player} dispatch={dispatch} />;
+  if (game.mode === "solo") return <SoloNegotiation game={game} dispatch={dispatch} />;
   return <div className="control-content negotiation-copy">
-    <span className="large-icon"><HandCoins size={28} /></span><h3>{game.mode === "solo" ? "Consider your next bid." : <>Make your case.<br />Or make a deal.</>}</h3>
-    <p>{game.mode === "solo" ? "Review your notebook and manage your funds before bidding. Bots don’t negotiate table deals; you can offer an owned item to them with Consign during Investigate." : "Compare notes, bluff about what you know, and agree on any offers. You can record item sales and payments here."}</p>
-    {game.mode !== "solo" && <button className="button secondary full-width" onClick={onDeals}>Record a table deal</button>}
+    <span className="large-icon"><HandCoins size={28} /></span><h3>Make your case.<br />Or make a deal.</h3>
+    <p>Compare notes, bluff about what you know, and agree on any offers. You can record item sales and payments here.</p>
+    <button className="button secondary full-width" onClick={onDeals}>Record a table deal</button>
     <button className="button primary full-width" onClick={() => dispatch({ type: "START_AUCTION" })}>Continue to Auction <ArrowRight size={17} /></button>
   </div>;
 }

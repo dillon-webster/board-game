@@ -22,7 +22,7 @@ async function finishBotTurns(page: Page) {
   throw new Error("Bot bidding did not finish");
 }
 
-test("play ten solo rounds with automatic bots, a human win, appraisal, resale, and reload", async ({ page }) => {
+test("play ten solo rounds with automatic bots, a human win, inspection, resale, and reload", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await pauseClock(page);
@@ -30,6 +30,7 @@ test("play ten solo rounds with automatic bots, a human win, appraisal, resale, 
   await page.getByRole("button", { name: "Play against bots", exact: true }).click();
   await expect(page.getByRole("textbox")).toHaveCount(1);
   await page.getByLabel("Player 1 name").fill("Tester");
+  await page.getByLabel("Guaranteed rounds", { exact: true }).fill("10");
   await page.getByRole("button", { name: "Open the auction house" }).click();
   await expect(page.getByRole("button", { name: "Clara", exact: true })).toBeDisabled();
   await expect(page.getByRole("button", { name: "Manage funds", exact: true })).toHaveCount(1);
@@ -76,16 +77,16 @@ test("play ten solo rounds with automatic bots, a human win, appraisal, resale, 
       await page.getByRole("button", { name: "Place bid", exact: true }).click();
       await finishBotTurns(page);
       expect((await state(page)).items[0].ownerId).toBe("player-1");
-      await page.getByRole("button", { name: "Purchase appraisal · $25,000" }).click();
+      await page.getByRole("button", { name: "Purchase inspection · $15,000" }).click();
       await page.getByRole("button", { name: "Reveal my private notes" }).click();
-      await expect(page.getByText("Exact item value", { exact: true })).toBeVisible();
+      await expect(page.locator(".clue-text")).toHaveCount(4);
       await page.getByRole("button", { name: "Hide notes & return to the table" }).click();
     } else {
       await page.getByRole("button", { name: "Pass this auction", exact: true }).click();
       await finishBotTurns(page);
     }
     const game = await state(page);
-    expect(game.players.slice(1).every(player => game.appraisalDone.includes(player.id))).toBe(true);
+    expect(game.players.slice(1).every(player => game.inspectionDone.includes(player.id))).toBe(true);
     await expect(page.getByRole("dialog")).toHaveCount(0);
     if (round < 10) await page.getByRole("button", { name: "Next round", exact: true }).click();
   }
@@ -146,16 +147,16 @@ test("bids appear one seat at a time, return to the human, and resume after relo
   await finishBotTurns(page);
   await page.getByRole("button", { name: "Pass this auction", exact: true }).click();
   await finishBotTurns(page);
-  await expect(page.getByRole("heading", { name: "Appraisal window" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Inspection window" })).toBeVisible();
   const game = await state(page);
   expect(game.items[0].ownerId).not.toBe("player-1");
   expect(game.bidding).toBeNull();
   await expect(page.getByRole("button", { name: "Place bid", exact: true })).toHaveCount(0);
 });
 
-test("the account shows estimated net worth, both debts, and updates after repayment and appraisal", async ({ page }) => {
+test("the account shows estimated net worth, both debts, and updates after repayment and inspection", async ({ page }) => {
   const game = generateGame(["You", "Clara", "Jules", "Remy"], GAME_CONFIG, () => 0.4, "solo");
-  game.phase = "appraisal";
+  game.phase = "inspection";
   game.players[0].cash = 180_000;
   const item = game.items[0];
   item.ownerId = "player-1";
@@ -183,11 +184,44 @@ test("the account shows estimated net worth, both debts, and updates after repay
   await page.screenshot({ path: "/tmp/mystery-auction-net-worth.png", fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.getByRole("button", { name: "Close dialog" }).click();
-  await page.getByLabel("Appraisal type").selectOption("Condition");
-  await page.getByRole("button", { name: "Purchase appraisal · $10,000" }).click();
+  await page.getByRole("button", { name: "Purchase inspection · $20,000" }).click();
   await page.getByRole("button", { name: "Close dialog" }).click();
   await page.reload();
   await page.getByRole("button", { name: "Manage funds", exact: true }).click();
-  await expect(summary).toContainText("$268,000");
-  await expect(page.locator(".account-totals")).toContainText("Estimated collection value$120,000");
+  // Clues never reveal exact modifiers, so only the inspection cost changes the estimate.
+  await expect(summary).toContainText("$238,000");
+  await expect(page.locator(".account-totals")).toContainText("Estimated collection value$100,000");
+});
+
+test("the setup screen sets the game length, and the auction house can close early", async ({ page }) => {
+  await pauseClock(page);
+  await page.goto("/");
+  await page.getByRole("button", { name: "Play against bots", exact: true }).click();
+  await page.getByLabel("Maximum rounds", { exact: true }).fill("3");
+  await page.getByLabel("Guaranteed rounds", { exact: true }).fill("4");
+  await expect(page.getByText(/no higher than the maximum/).first()).toBeVisible();
+  await page.getByRole("button", { name: "Open the auction house" }).click();
+  expect(await page.evaluate(key => localStorage.getItem(key), STORAGE_KEY)).toBeNull();
+  await page.getByLabel("Guaranteed rounds", { exact: true }).fill("2");
+  await expect(page.getByText("Four collectors. 2–3 mysteries.")).toBeVisible();
+  await expect(page.getByText(/After round 2, the auction house may close: 25% after each later round/)).toBeVisible();
+  await page.getByRole("button", { name: "Open the auction house" }).click();
+  await expect(page.locator(".round-marker")).toContainText("/ 2–3");
+  const game = await state(page);
+  expect([game.config.guaranteedRounds, game.config.rounds, game.items.length]).toEqual([2, 3, 3]);
+  for (let round = 1; round <= 2; round++) {
+    await page.getByRole("button", { name: "Hold · take no action" }).click();
+    await page.getByRole("button", { name: "Continue to Negotiation" }).click();
+    await page.getByRole("button", { name: "Continue to Auction" }).click();
+    await page.getByRole("button", { name: "Pass this auction", exact: true }).click();
+    await finishBotTurns(page);
+    if (round === 1) await page.getByRole("button", { name: "Next round", exact: true }).click();
+  }
+  await expect(page.getByRole("note")).toHaveText(/25% chance the auction house closes after this round/);
+  // A low roll closes the house at the first chance. Stubbed only now, after the app has loaded.
+  await page.evaluate(() => { Math.random = () => 0.1; });
+  await page.getByRole("button", { name: "Continue · the house may close" }).click();
+  await expect(page.getByRole("heading", { name: "Final accounts" })).toBeVisible();
+  await expect(page.getByText("All 2 lots revealed · the house closed after round 2 of 3")).toBeVisible();
+  expect((await state(page)).phase).toBe("finished");
 });

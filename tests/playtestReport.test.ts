@@ -7,13 +7,13 @@ import { parseSavedGame } from "../src/lib/storage";
 import { calculateItemValue } from "../src/lib/valuation";
 
 function completedGame() {
-  let game = generateGame(["You", "Clara", "Jules", "Remy"], { ...GAME_CONFIG, rounds: 2 }, () => 0.4, "solo");
+  let game = generateGame(["You", "Clara", "Jules", "Remy"], { ...GAME_CONFIG, rounds: 2, guaranteedRounds: 2 }, () => 0.4, "solo");
   for (let round = 1; round <= 2; round++) {
     for (const player of game.players) game = executeCommand(game, { type: "BUY_CLUE", playerId: player.id, slot: "Condition" }, () => 0);
     game = executeCommand(game, { type: "START_NEGOTIATION" });
     game = executeCommand(game, { type: "START_AUCTION" });
     game = executeCommand(game, { type: "RECORD_AUCTION", playerId: "player-1", bid: 10_000 });
-    game = executeCommand(game, { type: "PASS_APPRAISAL", playerId: "player-1" });
+    game = executeCommand(game, { type: "PASS_INSPECTION", playerId: "player-1" });
     game = executeCommand(game, { type: "ADVANCE" });
   }
   return game;
@@ -25,7 +25,7 @@ test("AI report preserves the complete game and full ledger without changing the
   const exported = createPlaytestReport(game, new Date("2026-10-02T12:34:56Z"));
   const report = JSON.parse(exported.content);
   assert.equal(report.format, "mystery-auction-playtest");
-  assert.equal(report.reportVersion, 1);
+  assert.equal(report.reportVersion, 2);
   assert.equal(report.exportedAt, "2026-10-02T12:34:56.000Z");
   assert.ok(exported.filename.endsWith(".json"));
   assert.deepEqual(report.game, game);
@@ -35,7 +35,7 @@ test("AI report preserves the complete game and full ledger without changing the
   assert.deepEqual(report.game.log, game.log);
   assert.deepEqual(report.summary.lots.map((lot: { trueValue: number }) => lot.trueValue), game.items.map(calculateItemValue));
   assert.equal(report.summary.lots[0].lastPurchasePrice, 10_000);
-  assert.ok(report.analysisContext.limitations.some((text: string) => text.includes("mandatory final appraisals")));
+  assert.ok(report.analysisContext.limitations.some((text: string) => text.includes("revealed to everyone at final settlement")));
   assert.equal(JSON.stringify(game), original);
 });
 

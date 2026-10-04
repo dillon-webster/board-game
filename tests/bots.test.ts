@@ -5,7 +5,7 @@ import { executePlayCommand as play, runBotTurns } from "../src/lib/botGame";
 import { GAME_CONFIG } from "../src/lib/config";
 import { currentItem, executeCommand, generateGame } from "../src/lib/gameEngine";
 import { parseSavedGame } from "../src/lib/storage";
-import { calculateItemValue, calculateNetWorth } from "../src/lib/valuation";
+import { calculateNetWorth } from "../src/lib/valuation";
 import { SLOT_RESULTS } from "../src/data/slotResults";
 import { SLOTS, type GameState } from "../src/types/game";
 
@@ -14,7 +14,7 @@ function seeded(seed = 42) {
   return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
 }
 function fresh(rounds = 10, seed = 42) {
-  return generateGame(["Tester", ...BOT_PROFILES.map(bot => bot.name)], { ...GAME_CONFIG, rounds }, seeded(seed), "solo");
+  return generateGame(["Tester", ...BOT_PROFILES.map(bot => bot.name)], { ...GAME_CONFIG, rounds, guaranteedRounds: rounds }, seeded(seed), "solo");
 }
 function auction(state: GameState) {
   let game = runBotTurns(state, seeded());
@@ -22,7 +22,7 @@ function auction(state: GameState) {
   return play(play(game, { type: "START_NEGOTIATION" }), { type: "START_AUCTION" });
 }
 function advance(game: GameState) {
-  if (!game.appraisalDone.includes(human)) game = play(game, { type: "PASS_APPRAISAL", playerId: human });
+  if (!game.inspectionDone.includes(human)) game = play(game, { type: "PASS_INSPECTION", playerId: human });
   return play(game, { type: "ADVANCE" }, seeded());
 }
 
@@ -47,7 +47,6 @@ test("bot bidding cannot read unseen truths, other notebooks, or future lots", (
     item.hidden[slot].clues = ["Unseen clue"];
   }
   changed.players[0].knowledge = structuredClone(changed.players[1].knowledge);
-  changed.players[0].knowledge["lot-1"].appraisedSlots = [...SLOTS];
   assert.deepEqual(observeItem(currentItem(changed), changed.players[1]), observation);
   assert.deepEqual(changed.players.slice(1).map(player => botBidLimit(changed, player, currentItem(changed))), before);
   // Throwing getters prove that even incidental access to an unknown slot fails.
@@ -55,15 +54,13 @@ test("bot bidding cannot read unseen truths, other notebooks, or future lots", (
   assert.doesNotThrow(() => botBidLimit(game, game.players[1], currentItem(game)));
 });
 
-test("own clues influence estimates; purchased appraisals allow exact valuation", () => {
+test("own clues influence estimates", () => {
   let game = fresh();
   const item = game.items[0];
   item.hidden.Authenticity = structuredClone(SLOT_RESULTS.Authenticity.find(result => result.id === "auth-rare")!);
   const prior = estimateValue(observeItem(item, game.players[1]));
   game = executeCommand(game, { type: "BUY_CLUE", playerId: "player-2", slot: "Authenticity" }, seeded());
   assert.ok(estimateValue(observeItem(game.items[0], game.players[1])) > prior);
-  game.players[1].knowledge[item.id].appraisedSlots = [...SLOTS];
-  assert.equal(estimateValue(observeItem(game.items[0], game.players[1])), calculateItemValue(game.items[0]));
 });
 
 test("bidding follows human, Clara, Jules, Remy and returns to the human for another round", () => {
@@ -100,7 +97,7 @@ test("passing withdraws a bidder and the leader is skipped until outbid", () => 
     assert.ok(!game.bidding.passedPlayerIds.includes(game.bidding.turnPlayerId));
     game = play(game, { type: "BOT_BID_TURN" });
   }
-  assert.equal(game.phase, "appraisal");
+  assert.equal(game.phase, "inspection");
   assert.ok(["player-3", "player-4"].includes(currentItem(game).ownerId!));
 });
 
@@ -165,12 +162,11 @@ test("auction progress survives reloads and inconsistent bidding saves are rejec
   assert.equal(migrated.bidding?.currentBid, 0);
 });
 
-test("passing lets bots win and appraise without exposing notes in the log", () => {
+test("passing lets bots win and pass inspection without exposing notes in the log", () => {
   const game = finishBotBidding(play(auction(fresh()), { type: "PASS_BID" }));
   const item = currentItem(game);
   assert.notEqual(item.ownerId, human);
-  assert.deepEqual(item.ownerAppraisedSlots, [...SLOTS]);
-  assert.ok(game.players.slice(1).every(player => game.appraisalDone.includes(player.id)));
+  assert.ok(game.players.slice(1).every(player => game.inspectionDone.includes(player.id)));
   for (const result of Object.values(item.hidden)) assert.ok(!JSON.stringify(game.log).includes(result.truth));
 });
 
@@ -180,11 +176,11 @@ test("cash-strapped bots hold and pass; an unsold lot still reaches final settle
   game = auction(game);
   assert.ok(game.players.every(player => game.actions[player.id] === "hold"));
   game = finishBotBidding(play(game, { type: "PASS_BID" }));
-  assert.equal(game.phase, "appraisal");
+  assert.equal(game.phase, "inspection");
   assert.equal(currentItem(game).ownerId, null);
   game = advance(game);
   assert.equal(game.phase, "finished");
-  assert.ok(game.scores.every(score => score.netWorth === 0 && score.appraisalFees === 0));
+  assert.ok(game.scores.every(score => score.netWorth === 0));
   assert.deepEqual(parseSavedGame(JSON.stringify(game)), game);
 });
 
@@ -216,11 +212,11 @@ test("varied ten-round solo games finish with valid accounts and stable reloads"
       while (game.bidding) {
         game = play(game, game.bidding.turnPlayerId === human ? { type: "PASS_BID" } : { type: "BOT_BID_TURN" });
       }
-      assert.equal(game.phase, "appraisal");
+      assert.equal(game.phase, "inspection");
       for (const player of game.players.slice(1)) {
         assert.ok(player.cash >= 0);
         assert.equal(player.auctionDebt, 0);
-        assert.ok(game.appraisalDone.includes(player.id));
+        assert.ok(game.inspectionDone.includes(player.id));
       }
       game = parseSavedGame(JSON.stringify(game));
       game = advance(game);
@@ -230,4 +226,11 @@ test("varied ten-round solo games finish with valid accounts and stable reloads"
     assert.equal(game.scores.length, 4);
     for (const score of game.scores) assert.equal(score.netWorth, calculateNetWorth(game, game.players.find(player => player.id === score.playerId)!));
   }
+});
+
+test("bots plan for the expected game length, so an uncertain ending makes them spend sooner", () => {
+  const fixed = fresh(10);
+  const uncertain = generateGame(["Tester", ...BOT_PROFILES.map(bot => bot.name)], GAME_CONFIG, seeded(), "solo");
+  const limit = (game: GameState) => botBidLimit(game, game.players[3], currentItem(game));
+  assert.ok(limit(uncertain) > limit(fixed));
 });

@@ -4,6 +4,8 @@
 
 These decisions supersede any ambiguity in the original brief below:
 
+- **Inspections replace appraisals (2026-10-02):** Partial/full appraisals and all mandatory endgame appraisal fees are removed. After each main auction, an owner may buy one full inspection on one owned item: it reveals one clue in every category for $5,000 per category the player has not already clued. Exact truths and modifiers are only revealed at final settlement, for free. The Appraisal Knowledge and Appraisal Window rules below are retained for history only.
+
 - **Collateral default:** An unpaid leverage loan forfeits its collateral at game end and that specific loan is cleared. The player loses the item without also subtracting that loan from net worth. Only one active leverage loan per item is allowed.
 - **Appraisal knowledge:** Hidden truth belongs to the item; learned clues and appraisal information belong to the player. Every ownership transfer gives the new owner no appraisal status, while the previous owner retains remembered information. Endgame fees use the current owner's own appraisal status for that ownership period.
 - **Appraisal Window:** After each main auction, each player who owns an item may buy one appraisal on one owned item, including the lot they just won. They must pay with actual cash and have no auction debt. A player may pass instead. Mandatory endgame appraisals happen separately after Round 10.
